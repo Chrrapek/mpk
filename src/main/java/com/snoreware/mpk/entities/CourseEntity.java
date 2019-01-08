@@ -14,7 +14,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class CourseEntity {
     @Id
-    @Column(name = "courseId", nullable = false)
+    @Column(name = "id", nullable = false)
     private int courseId;
 
     @Column(name = "lowFloorNeeded", nullable = false)
