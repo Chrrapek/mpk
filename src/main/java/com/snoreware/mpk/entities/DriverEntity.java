@@ -13,9 +13,17 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "drivers")
 public class DriverEntity {
+    public DriverEntity(String name, String surname, String sex, Float salary) {
+        this.name = name;
+        this.surname = surname;
+        this.sex = sex;
+        this.salary = salary;
+    }
+
     @Id
+    @GeneratedValue
     @Column(name = "id", nullable = false)
-    private String driverId;
+    private Long driverId;
 
     @Column(name = "name", nullable = false)
     private String name;

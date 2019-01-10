@@ -16,8 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "buses")
 public class BusEntity extends VehicleEntity {
-    public BusEntity(Long vehicleNumber, boolean lowFloor, boolean articulated) {
-        super(vehicleNumber, lowFloor);
+    public BusEntity(boolean lowFloor, boolean articulated) {
+        super(lowFloor);
         this.articulated = articulated;
     }
 
