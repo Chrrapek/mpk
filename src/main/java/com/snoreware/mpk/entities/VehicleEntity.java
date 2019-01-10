@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -13,8 +12,13 @@ import javax.persistence.MappedSuperclass;
 @NoArgsConstructor
 @MappedSuperclass
 public abstract class VehicleEntity {
+    public VehicleEntity(Long vehicleNumber, boolean lowFloor) {
+        this.vehicleNumber = vehicleNumber;
+        this.lowFloor = lowFloor;
+        this.vehicleBreakdown = false;
+    }
+
     @Id
-    @GeneratedValue
     private Long vehicleNumber;
 
     private boolean vehicleBreakdown;
