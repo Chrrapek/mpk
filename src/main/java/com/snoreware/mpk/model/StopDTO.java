@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BusDTO {
-    private boolean articulated;
-    private boolean lowFloor;
+public class StopDTO {
+    private UUID stopId;
+    private boolean stopBreakdown;
 }

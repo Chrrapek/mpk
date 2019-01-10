@@ -26,10 +26,4 @@ public class BusEntity extends VehicleEntity {
 
     @OneToMany(mappedBy = "bus")
     private List<BusCourseEntity> busCourses;
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Autobus[id = %d, przegubowy = %b]", getVehicleNumber(), this.articulated);
-    }
 }

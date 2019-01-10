@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -23,7 +24,7 @@ public class DriverEntity {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
-    private Long driverId;
+    private UUID driverId;
 
     @Column(name = "name", nullable = false)
     private String name;

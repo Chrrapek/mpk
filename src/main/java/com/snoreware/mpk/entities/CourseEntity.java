@@ -3,19 +3,28 @@ package com.snoreware.mpk.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
 public abstract class CourseEntity {
+    public CourseEntity(boolean lowFloorNeeded, int courseNumber) {
+        this.courseId = UUID.randomUUID();
+        this.lowFloorNeeded = lowFloorNeeded;
+        this.courseNumber = courseNumber;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
-    private int courseId;
+    @UniqueElements
+    private UUID courseId;
 
     @Column(name = "lowFloorNeeded", nullable = false)
     private boolean lowFloorNeeded;

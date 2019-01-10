@@ -16,6 +16,11 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "trams")
 public class TramEntity extends VehicleEntity {
+    public TramEntity(boolean lowFloor, int numberOfWagons) {
+        super(lowFloor);
+        this.numberOfWagons = numberOfWagons;
+    }
+
     @Column(name = "numberOfWagons")
     private int numberOfWagons;
 
