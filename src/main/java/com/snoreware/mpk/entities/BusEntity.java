@@ -16,13 +16,13 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "buses")
 public class BusEntity extends VehicleEntity {
-    public BusEntity(boolean lowFloor, boolean articulated) {
+    public BusEntity(Boolean lowFloor, Boolean articulated) {
         super(lowFloor);
         this.articulated = articulated;
     }
 
     @Column(name = "articulated", nullable = false)
-    private boolean articulated;
+    private Boolean articulated;
 
     @OneToMany(mappedBy = "bus")
     private List<BusCourseEntity> busCourses;

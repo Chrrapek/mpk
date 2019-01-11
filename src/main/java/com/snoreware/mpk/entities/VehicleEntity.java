@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
+@SequenceGenerator(name = "seq", initialValue = 1000, allocationSize = 100)
 public abstract class VehicleEntity {
     public VehicleEntity(boolean lowFloor) {
         this.lowFloor = lowFloor;
@@ -19,10 +18,10 @@ public abstract class VehicleEntity {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long vehicleNumber;
 
-    private boolean vehicleBreakdown;
+    private Boolean vehicleBreakdown;
 
-    private boolean lowFloor;
+    private Boolean lowFloor;
 }

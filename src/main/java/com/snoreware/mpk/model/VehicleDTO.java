@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VehicleDTO {
     private Long vehicleNumber;
-    private boolean vehicleBreakdown;
-    private int numberOfWagons; //only for trams
-    private boolean articulated; //only for buses
-    private boolean lowFloor;
+    private Boolean vehicleBreakdown;
+    private Integer numberOfWagons; //only for trams
+    private Boolean articulated; //only for buses
+    private Boolean lowFloor;
 }

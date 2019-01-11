@@ -39,7 +39,7 @@ public class DriverEntity {
     private Float salary;
 
     @Column(name = "seniority")
-    private int seniority;
+    private Integer seniority;
 
     @OneToMany(mappedBy = "driver")
     private List<TramCourseEntity> tramCourses;

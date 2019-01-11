@@ -3,7 +3,6 @@ package com.snoreware.mpk.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -23,7 +22,6 @@ public abstract class CourseEntity {
 
     @Id
     @Column(name = "id", nullable = false)
-    @UniqueElements
     private UUID courseId;
 
     @Column(name = "lowFloorNeeded", nullable = false)

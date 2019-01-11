@@ -16,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 public class RouteEntity {
     @Id
-    @Column(name = "routeNumber", nullable = false)
-    private int routeNumber;
+    @Column(name = "routeId", nullable = false)
+    private int routeId;
 
     @OneToMany(mappedBy = "route")
     private List<TramCourseEntity> tramCourses;

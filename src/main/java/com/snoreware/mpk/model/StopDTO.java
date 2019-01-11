@@ -11,5 +11,5 @@ import java.util.UUID;
 @NoArgsConstructor
 public class StopDTO {
     private UUID stopId;
-    private boolean stopBreakdown;
+    private Boolean stopBreakdown;
 }

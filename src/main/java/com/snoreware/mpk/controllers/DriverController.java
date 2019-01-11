@@ -45,13 +45,16 @@ public class DriverController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/changeSalary")
+    @PatchMapping("/update")
     public ResponseEntity<Object> updateSalary(@RequestBody DriverDTO driver) {
         DriverEntity driverToUpdate = repository.findByDriverId(driver.getDriverId());
-        driverToUpdate.setSalary(driver.getSalary());
+        if (driver.getName() != null) driverToUpdate.setName(driver.getName());
+        if (driver.getSurname() != null) driverToUpdate.setSurname(driver.getSurname());
+        if (driver.getSex() != null) driverToUpdate.setSex(driver.getSex());
+        if (driver.getSalary() != null) driverToUpdate.setSalary(driver.getSalary());
         repository.save(driverToUpdate);
 
-        log.info(String.format("Changed driver's %s salary to %f", driver.getDriverId(), driver.getSalary()));
+        log.info(String.format("Changed driver %s", driver.getDriverId()));
         return ResponseEntity.ok().build();
     }
 }

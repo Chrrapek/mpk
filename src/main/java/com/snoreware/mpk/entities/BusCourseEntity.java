@@ -15,6 +15,11 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Table(name = "busCourses")
 public class BusCourseEntity extends CourseEntity {
+    public BusCourseEntity(boolean lowFloorNeeded, int courseNumber, boolean needsArticulated) {
+        super(lowFloorNeeded, courseNumber);
+        this.needsArticulated = needsArticulated;
+    }
+
     @Column(name = "needsArticulated", nullable = false)
     private boolean needsArticulated;
 

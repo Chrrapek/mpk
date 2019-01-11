@@ -15,8 +15,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Table(name = "tramCourses")
 public class TramCourseEntity extends CourseEntity {
-    public TramCourseEntity(boolean lowFloorNeeded,
-                            int courseNumber, boolean needsManyWagons) {
+    public TramCourseEntity(boolean lowFloorNeeded, int courseNumber, boolean needsManyWagons) {
         super(lowFloorNeeded, courseNumber);
         this.needsManyWagons = needsManyWagons;
     }
