@@ -40,6 +40,17 @@ public class TramController {
         log.info(String.format("Removed tram of id %d", vehicleDTO.getVehicleNumber()));
     }
 
+    @PatchMapping("/update")
+    public ResponseEntity updateBus(@RequestBody VehicleDTO vehicleDTO) {
+        TramEntity tramToUpdate = tramRepository.findByVehicleNumber(vehicleDTO.getVehicleNumber());
+        if (vehicleDTO.getLowFloor() != null)
+            tramToUpdate.setLowFloor(vehicleDTO.getLowFloor());
+        if (vehicleDTO.getNumberOfWagons() != null)
+            tramToUpdate.setNumberOfWagons(vehicleDTO.getNumberOfWagons());
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<TramEntity>> getAllBuses() {
         List<TramEntity> trams = (List<TramEntity>) tramRepository.findAll();

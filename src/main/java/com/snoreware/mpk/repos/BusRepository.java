@@ -9,6 +9,5 @@ import java.util.List;
 @Repository
 public interface BusRepository extends CrudRepository<BusEntity, Long> {
     List<BusEntity> findByArticulated(boolean articulated);
-
     BusEntity findByVehicleNumber(Long vehicleNumber);
 }

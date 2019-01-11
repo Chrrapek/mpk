@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TramRepository extends CrudRepository<TramEntity, Long> {
-
+    TramEntity findByVehicleNumber(Long vehicleNumber);
 }

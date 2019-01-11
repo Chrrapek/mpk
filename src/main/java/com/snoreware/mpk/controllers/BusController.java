@@ -55,4 +55,13 @@ public class BusController {
 
         return ResponseEntity.ok().body(buses);
     }
+
+    @PostMapping("/failure")
+    public ResponseEntity changeBreakdownStatus(@RequestBody VehicleDTO vehicleDTO) {
+        BusEntity busToChange = busRepository.findByVehicleNumber(vehicleDTO.getVehicleNumber());
+        busToChange.setVehicleBreakdown(!busToChange.getVehicleBreakdown());
+
+        busRepository.save(busToChange);
+        return ResponseEntity.ok().build();
+    }
 }
