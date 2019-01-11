@@ -6,7 +6,10 @@ import com.snoreware.mpk.model.VehicleDTO;
 import com.snoreware.mpk.repos.TramRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tram")
@@ -35,5 +38,12 @@ public class TramController {
         tramRepository.deleteById(vehicleDTO.getVehicleNumber());
 
         log.info(String.format("Removed tram of id %d", vehicleDTO.getVehicleNumber()));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<TramEntity>> getAllBuses() {
+        List<TramEntity> trams = (List<TramEntity>) tramRepository.findAll();
+
+        return ResponseEntity.ok().body(trams);
     }
 }
