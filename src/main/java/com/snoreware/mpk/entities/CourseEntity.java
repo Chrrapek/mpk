@@ -14,19 +14,15 @@ import java.util.UUID;
 @AllArgsConstructor
 @MappedSuperclass
 public abstract class CourseEntity {
-    public CourseEntity(boolean lowFloorNeeded, int courseNumber) {
+    public CourseEntity(boolean lowFloorNeeded) {
         this.courseId = UUID.randomUUID();
         this.lowFloorNeeded = lowFloorNeeded;
-        this.courseNumber = courseNumber;
     }
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "course_id", nullable = false, unique = true)
     private UUID courseId;
 
-    @Column(name = "lowFloorNeeded", nullable = false)
+    @Column(name = "low_floor_needed", nullable = false)
     private boolean lowFloorNeeded;
-
-    @Column(name = "courseNumber", nullable = false)
-    private int courseNumber;
 }

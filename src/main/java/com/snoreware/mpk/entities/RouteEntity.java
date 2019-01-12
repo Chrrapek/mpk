@@ -4,20 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "routes")
 public class RouteEntity {
+    public RouteEntity(Long routeNumber) {
+        this.routeNumber = routeNumber;
+    }
+
     @Id
-    @Column(name = "routeId", nullable = false)
-    private int routeId;
+    @Column(name = "route_number", nullable = false, unique = true)
+    private Long routeNumber;
 
     @OneToMany(mappedBy = "route")
     private List<TramCourseEntity> tramCourses;

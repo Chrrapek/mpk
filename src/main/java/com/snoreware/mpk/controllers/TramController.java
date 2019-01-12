@@ -41,7 +41,7 @@ public class TramController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity updateBus(@RequestBody VehicleDTO vehicleDTO) {
+    public ResponseEntity updateTram(@RequestBody VehicleDTO vehicleDTO) {
         TramEntity tramToUpdate = tramRepository.findByVehicleNumber(vehicleDTO.getVehicleNumber());
         if (vehicleDTO.getLowFloor() != null)
             tramToUpdate.setLowFloor(vehicleDTO.getLowFloor());
@@ -52,9 +52,18 @@ public class TramController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<TramEntity>> getAllBuses() {
+    public ResponseEntity<List<TramEntity>> getAllTrams() {
         List<TramEntity> trams = (List<TramEntity>) tramRepository.findAll();
 
         return ResponseEntity.ok().body(trams);
+    }
+
+    @PostMapping("/failure")
+    public ResponseEntity changeBreakdownStatus(@RequestBody VehicleDTO vehicleDTO) {
+        TramEntity tramToChange = tramRepository.findByVehicleNumber(vehicleDTO.getVehicleNumber());
+        tramToChange.setVehicleBreakdown(!tramToChange.getVehicleBreakdown());
+
+        tramRepository.save(tramToChange);
+        return ResponseEntity.ok().build();
     }
 }

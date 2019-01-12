@@ -8,5 +8,9 @@ import java.util.UUID;
 
 @Repository
 public interface StopRepository extends CrudRepository<StopEntity, UUID> {
+    StopEntity findByStopId(UUID stopId);
 
+    StopEntity findByStopName(String stopName);
+
+    void deleteByStopName(String stopName);
 }

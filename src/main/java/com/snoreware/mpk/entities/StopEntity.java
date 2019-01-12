@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -14,11 +15,20 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "stops")
 public class StopEntity {
-    @Id
-    @Column(name = "id", nullable = false)
-    private String stopId;
+    public StopEntity(String stopName) {
+        this.stopId = UUID.randomUUID();
+        this.stopName = stopName;
+        this.stopBreakdown = false;
+    }
 
-    @Column(name = "stopBreakdown", nullable = false)
+    @Id
+    @Column(name = "stop_id", nullable = false, unique = true)
+    private UUID stopId;
+
+    @Column(name = "stop_name", nullable = false, unique = true)
+    private String stopName;
+
+    @Column(name = "stop_breakdown", nullable = false)
     private boolean stopBreakdown;
 
     @OneToMany(mappedBy = "stop")

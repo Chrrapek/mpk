@@ -13,14 +13,15 @@ import javax.persistence.Table;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tramCourses")
+@Table(name = "tram_courses")
 public class TramCourseEntity extends CourseEntity {
-    public TramCourseEntity(boolean lowFloorNeeded, int courseNumber, boolean needsManyWagons) {
-        super(lowFloorNeeded, courseNumber);
+    public TramCourseEntity(boolean lowFloorNeeded, Long routeNumber, boolean needsManyWagons) {
+        super(lowFloorNeeded);
         this.needsManyWagons = needsManyWagons;
+        this.route = new RouteEntity(routeNumber);
     }
 
-    @Column(name = "needsManyWagons")
+    @Column(name = "needs_many_wagons")
     private boolean needsManyWagons;
 
     @ManyToOne

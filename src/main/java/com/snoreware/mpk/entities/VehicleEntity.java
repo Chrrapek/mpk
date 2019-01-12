@@ -10,7 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
-@SequenceGenerator(name = "seq", initialValue = 1000, allocationSize = 100)
+@SequenceGenerator(name = "seq", initialValue = 100, allocationSize = 1000)
 public abstract class VehicleEntity {
     public VehicleEntity(boolean lowFloor) {
         this.lowFloor = lowFloor;

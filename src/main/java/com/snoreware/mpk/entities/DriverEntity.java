@@ -23,22 +23,22 @@ public class DriverEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "id", nullable = false)
+    @Column(name = "driver_id", nullable = false, unique = true)
     private UUID driverId;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "driver_name", nullable = false)
     private String name;
 
-    @Column(name = "surname", nullable = false)
+    @Column(name = "driver_surname", nullable = false)
     private String surname;
 
-    @Column(name = "sex", nullable = false)
+    @Column(name = "driver_sex", nullable = false)
     private String sex;
 
-    @Column(name = "salary", nullable = false)
+    @Column(name = "driver_salary", nullable = false)
     private Float salary;
 
-    @Column(name = "seniority")
+    @Column(name = "driver_seniority")
     private Integer seniority;
 
     @OneToMany(mappedBy = "driver")

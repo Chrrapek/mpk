@@ -29,11 +29,11 @@ public class CourseController {
     private ResponseEntity addTramCourse(@RequestBody CourseDTO courseDTO) {
         TramCourseEntity tramCourse = new TramCourseEntity(
                 courseDTO.getLowFloorNeeded(),
-                courseDTO.getCourseNumber(),
+                courseDTO.getRouteNumber(),
                 courseDTO.getManyWagonsNeeded());
         tramCourseRepository.save(tramCourse);
 
-        log.info(String.format("Added new tram course with number %d", tramCourse.getCourseNumber()));
+        log.info(String.format("Added new tram course on route %d", courseDTO.getRouteNumber()));
 
         return ResponseEntity.ok().build();
     }
@@ -42,11 +42,11 @@ public class CourseController {
     private ResponseEntity addBusCourse(@RequestBody CourseDTO courseDTO) {
         BusCourseEntity busCourse = new BusCourseEntity(
                 courseDTO.getLowFloorNeeded(),
-                courseDTO.getCourseNumber(),
+                courseDTO.getRouteNumber(),
                 courseDTO.getArticulatedNeeded());
         busCourseRepository.save(busCourse);
 
-        log.info(String.format("Added new bus course with number %d", busCourse.getCourseNumber()));
+        log.info(String.format("Added new bus course on route %d", courseDTO.getRouteNumber()));
 
         return ResponseEntity.ok().build();
     }

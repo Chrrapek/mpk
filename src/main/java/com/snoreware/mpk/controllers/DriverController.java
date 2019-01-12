@@ -38,7 +38,7 @@ public class DriverController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> deleteDriver(@RequestBody DriverDTO driver) {
+    public ResponseEntity deleteDriver(@RequestBody DriverDTO driver) {
         repository.deleteById(driver.getDriverId());
 
         log.info("Deleted driver with id %d", driver.getDriverId());

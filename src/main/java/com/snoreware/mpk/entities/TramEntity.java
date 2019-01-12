@@ -21,7 +21,7 @@ public class TramEntity extends VehicleEntity {
         this.numberOfWagons = numberOfWagons;
     }
 
-    @Column(name = "numberOfWagons")
+    @Column(name = "number_of_wagons")
     private int numberOfWagons;
 
     @OneToMany(mappedBy = "tram")

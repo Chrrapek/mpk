@@ -11,8 +11,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CourseDTO {
     private UUID courseId;
+    private Long routeNumber;
     private Boolean manyWagonsNeeded;
     private Boolean articulatedNeeded;
     private Boolean lowFloorNeeded;
-    private Integer courseNumber;
 }
