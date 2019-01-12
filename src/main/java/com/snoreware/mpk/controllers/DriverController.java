@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/driver")
 public class DriverController {
@@ -56,5 +58,12 @@ public class DriverController {
 
         log.info(String.format("Changed driver %s", driver.getDriverId()));
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<DriverEntity>> getAllDrivers() {
+        List<DriverEntity> drivers = repository.findAllByOrderByDriverIdAsc();
+
+        return ResponseEntity.ok().body(drivers);
     }
 }

@@ -6,6 +6,8 @@ import com.snoreware.mpk.repos.StopRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/stop")
 @RestController
 public class StopController {
@@ -34,7 +36,7 @@ public class StopController {
     @PatchMapping("/update")
     public ResponseEntity updateStop(@RequestBody StopDTO stopDTO) {
         StopEntity stopToUpdate;
-        stopToUpdate = getInstanceOrReturnBadRequest(stopDTO);
+        stopToUpdate = getInstanceOrReturnNull(stopDTO);
 
         if (stopToUpdate != null)
             if (stopDTO.getStopName() != null)
@@ -48,7 +50,7 @@ public class StopController {
     @PatchMapping("/failure")
     public ResponseEntity changeStopBreakdownStatus(@RequestBody StopDTO stopDTO) {
         StopEntity stopToUpdate;
-        stopToUpdate = getInstanceOrReturnBadRequest(stopDTO);
+        stopToUpdate = getInstanceOrReturnNull(stopDTO);
 
         if (stopToUpdate != null) stopToUpdate.setStopBreakdown(!stopToUpdate.isStopBreakdown());
         else return ResponseEntity.badRequest().build();
@@ -56,7 +58,14 @@ public class StopController {
         return ResponseEntity.ok().build();
     }
 
-    private StopEntity getInstanceOrReturnBadRequest(StopDTO stopDTO) {
+    @GetMapping("/all")
+    public ResponseEntity<List<StopEntity>> getAllStops() {
+        List<StopEntity> stops = repository.findAllByOrderByStopNameDesc();
+
+        return ResponseEntity.ok().body(stops);
+    }
+
+    private StopEntity getInstanceOrReturnNull(StopDTO stopDTO) {
         StopEntity stopToUpdate;
         if (stopDTO.getStopId() != null) stopToUpdate = repository.findByStopId(stopDTO.getStopId());
         else if (stopDTO.getStopName() != null) stopToUpdate = repository.findByStopName(stopDTO.getStopName());

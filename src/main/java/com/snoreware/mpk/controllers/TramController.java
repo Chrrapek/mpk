@@ -53,7 +53,7 @@ public class TramController {
 
     @GetMapping("/all")
     public ResponseEntity<List<TramEntity>> getAllTrams() {
-        List<TramEntity> trams = (List<TramEntity>) tramRepository.findAll();
+        List<TramEntity> trams = tramRepository.findAllByOrderByVehicleNumberDesc();
 
         return ResponseEntity.ok().body(trams);
     }

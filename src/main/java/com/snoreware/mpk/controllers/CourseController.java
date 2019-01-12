@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/course")
 public class CourseController {
@@ -67,5 +69,19 @@ public class CourseController {
         log.info(String.format("Removed course with UUID %s", courseDTO.getCourseId()));
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/allBus")
+    private ResponseEntity<List<BusCourseEntity>> getAllBusCourses() {
+        List<BusCourseEntity> busCourses = busCourseRepository.findAllByOrderByCourseIdDesc();
+
+        return ResponseEntity.ok().body(busCourses);
+    }
+
+    @GetMapping("/allTram")
+    private ResponseEntity<List<TramCourseEntity>> getAllTramCourses() {
+        List<TramCourseEntity> tramCourses = tramCourseRepository.findAllByOrderByCourseIdDesc();
+
+        return ResponseEntity.ok().body(tramCourses);
     }
 }

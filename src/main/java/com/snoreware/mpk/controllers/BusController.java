@@ -51,7 +51,7 @@ public class BusController {
 
     @GetMapping("/all")
     public ResponseEntity<List<BusEntity>> getAllBuses() {
-        List<BusEntity> buses = (List<BusEntity>) busRepository.findAll();
+        List<BusEntity> buses = busRepository.findAllByOrderByVehicleNumberAsc();
 
         return ResponseEntity.ok().body(buses);
     }
