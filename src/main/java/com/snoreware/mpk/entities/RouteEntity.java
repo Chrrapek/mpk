@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,11 +23,11 @@ public class RouteEntity {
     private Long routeNumber;
 
     @OneToMany(mappedBy = "route")
-    private List<TramCourseEntity> tramCourses;
+    private List<TramCourseEntity> tramCourses = new ArrayList<>();
 
     @OneToMany(mappedBy = "route")
-    private List<BusCourseEntity> busCourses;
+    private List<BusCourseEntity> busCourses = new ArrayList<>();
 
     @OneToMany(mappedBy = "route")
-    private List<StopOnRouteEntity> stopsOnRoutes;
+    private List<StopOnRouteEntity> stopsOnRoutes = new ArrayList<>();
 }
