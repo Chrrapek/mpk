@@ -48,7 +48,8 @@ public class StopsOnRouteController {
 
     @GetMapping("/getOne")
     public ResponseEntity<List<StopOnRouteEntity>> getOneRoute(@RequestBody StopsOnRouteDTO dto) {
-        List<StopOnRouteEntity> stops = repository.findAllByRoute(new RouteEntity(dto.getRouteNumber()));
+        RouteEntity route = new RouteEntity(dto.getRouteNumber());
+        List<StopOnRouteEntity> stops = repository.findByRoute(new RouteEntity(dto.getRouteNumber()));
 
         return ResponseEntity.ok().body(stops);
     }

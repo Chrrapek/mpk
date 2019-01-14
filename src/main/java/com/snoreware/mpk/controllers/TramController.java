@@ -48,6 +48,7 @@ public class TramController {
         if (vehicleDTO.getNumberOfWagons() != null)
             tramToUpdate.setNumberOfWagons(vehicleDTO.getNumberOfWagons());
 
+        tramRepository.save(tramToUpdate);
         return ResponseEntity.ok().build();
     }
 

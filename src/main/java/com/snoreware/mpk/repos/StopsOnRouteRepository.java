@@ -11,5 +11,5 @@ import java.util.List;
 public interface StopsOnRouteRepository extends CrudRepository<StopOnRouteEntity, Long> {
     void deleteByRoute(RouteEntity route);
 
-    List<StopOnRouteEntity> findAllByRoute(RouteEntity route);
+    List<StopOnRouteEntity> findByRoute(RouteEntity route);
 }

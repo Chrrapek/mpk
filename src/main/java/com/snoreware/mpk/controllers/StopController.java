@@ -44,6 +44,7 @@ public class StopController {
             else return ResponseEntity.badRequest().build();
         else return ResponseEntity.badRequest().build();
 
+        repository.save(stopToUpdate);
         return ResponseEntity.ok().build();
     }
 

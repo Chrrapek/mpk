@@ -46,6 +46,7 @@ public class BusController {
         if (vehicleDTO.getArticulated() != null)
             busToUpdate.setArticulated(vehicleDTO.getArticulated());
 
+        busRepository.save(busToUpdate);
         return ResponseEntity.ok().build();
     }
 
