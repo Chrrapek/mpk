@@ -42,7 +42,7 @@ public class DriverController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{uid}")
     public ResponseEntity deleteDriver(@PathVariable UUID uid) {
         repository.deleteById(uid);
 
@@ -50,7 +50,7 @@ public class DriverController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/update/{id}")
+    @PatchMapping("/update/{ŭid}")
     public ResponseEntity<Object> updateSalary(@RequestBody DriverDTO driver, @PathVariable UUID uid) {
         DriverEntity driverToUpdate = repository.findByDriverId(uid);
         if (driver.getName() != null) driverToUpdate.setName(driver.getName());
