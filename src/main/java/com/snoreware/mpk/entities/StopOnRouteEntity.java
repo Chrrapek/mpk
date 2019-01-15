@@ -1,6 +1,6 @@
 package com.snoreware.mpk.entities;
 
-import com.snoreware.mpk.model.StopOnRouteKey;
+import com.snoreware.mpk.model.input.StopOnRouteKey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

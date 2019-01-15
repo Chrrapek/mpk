@@ -1,7 +1,7 @@
 package com.snoreware.mpk.controllers;
 
 import com.snoreware.mpk.entities.StopEntity;
-import com.snoreware.mpk.model.StopDTO;
+import com.snoreware.mpk.model.input.StopDTO;
 import com.snoreware.mpk.repos.StopRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

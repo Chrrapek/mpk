@@ -1,4 +1,4 @@
-package com.snoreware.mpk.model;
+package com.snoreware.mpk.model.input;
 
 import java.io.Serializable;
 import java.util.UUID;

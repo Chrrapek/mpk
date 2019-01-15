@@ -2,7 +2,7 @@ package com.snoreware.mpk.controllers;
 
 import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.RouteEntity;
-import com.snoreware.mpk.model.RouteDTO;
+import com.snoreware.mpk.model.input.RouteDTO;
 import com.snoreware.mpk.repos.RouteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

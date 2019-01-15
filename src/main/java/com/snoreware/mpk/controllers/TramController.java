@@ -1,15 +1,19 @@
 package com.snoreware.mpk.controllers;
 
 import com.snoreware.mpk.MpkApplication;
+import com.snoreware.mpk.entities.TramCourseEntity;
 import com.snoreware.mpk.entities.TramEntity;
-import com.snoreware.mpk.model.VehicleDTO;
+import com.snoreware.mpk.model.input.VehicleDTO;
+import com.snoreware.mpk.model.output.TramDTO;
 import com.snoreware.mpk.repos.TramRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/tram")
@@ -53,10 +57,20 @@ public class TramController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<TramEntity>> getAllTrams() {
+    public ResponseEntity<List<TramDTO>> getAllTrams() {
         List<TramEntity> trams = tramRepository.findAllByOrderByVehicleNumberDesc();
 
-        return ResponseEntity.ok().body(trams);
+        List<TramDTO> response = new ArrayList<>();
+        for (TramEntity tramEntity : trams) {
+            response.add(new TramDTO(
+                    tramEntity.getVehicleNumber(),
+                    tramEntity.getNumberOfWagons(),
+                    tramEntity.getLowFloor(),
+                    getUUIDList(tramEntity.getTramCourses()),
+                    tramEntity.getVehicleBreakdown()));
+        }
+
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/failure")
@@ -66,5 +80,13 @@ public class TramController {
 
         tramRepository.save(tramToChange);
         return ResponseEntity.ok().build();
+    }
+
+    public List<UUID> getUUIDList(List<TramCourseEntity> busCourses) {
+        List<UUID> result = new ArrayList<>();
+        for (TramCourseEntity course : busCourses)
+            result.add(course.getCourseId());
+
+        return result;
     }
 }

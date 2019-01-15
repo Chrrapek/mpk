@@ -4,7 +4,7 @@ import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.RouteEntity;
 import com.snoreware.mpk.entities.StopEntity;
 import com.snoreware.mpk.entities.StopOnRouteEntity;
-import com.snoreware.mpk.model.StopsOnRouteDTO;
+import com.snoreware.mpk.model.input.StopsOnRouteDTO;
 import com.snoreware.mpk.repos.StopsOnRouteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

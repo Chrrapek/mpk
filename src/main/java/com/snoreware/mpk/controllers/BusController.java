@@ -1,15 +1,19 @@
 package com.snoreware.mpk.controllers;
 
 import com.snoreware.mpk.MpkApplication;
+import com.snoreware.mpk.entities.BusCourseEntity;
 import com.snoreware.mpk.entities.BusEntity;
-import com.snoreware.mpk.model.VehicleDTO;
+import com.snoreware.mpk.model.input.VehicleDTO;
+import com.snoreware.mpk.model.output.BusDTO;
 import com.snoreware.mpk.repos.BusRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/bus")
@@ -51,10 +55,20 @@ public class BusController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<BusEntity>> getAllBuses() {
+    public ResponseEntity<List<BusDTO>> getAllBuses() {
         List<BusEntity> buses = busRepository.findAllByOrderByVehicleNumberAsc();
 
-        return ResponseEntity.ok().body(buses);
+        List<BusDTO> response = new ArrayList<>();
+        for (BusEntity busEntity : buses) {
+            response.add(new BusDTO(
+                    busEntity.getVehicleNumber(),
+                    busEntity.getArticulated(),
+                    busEntity.getLowFloor(),
+                    getUUIDList(busEntity.getBusCourses()),
+                    busEntity.getVehicleBreakdown()));
+        }
+
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/failure")
@@ -64,5 +78,13 @@ public class BusController {
 
         busRepository.save(busToChange);
         return ResponseEntity.ok().build();
+    }
+
+    public List<UUID> getUUIDList(List<BusCourseEntity> busCourses) {
+        List<UUID> result = new ArrayList<>();
+        for (BusCourseEntity course : busCourses)
+            result.add(course.getCourseId());
+
+        return result;
     }
 }

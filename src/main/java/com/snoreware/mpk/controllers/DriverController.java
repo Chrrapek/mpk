@@ -2,7 +2,7 @@ package com.snoreware.mpk.controllers;
 
 import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.DriverEntity;
-import com.snoreware.mpk.model.DriverDTO;
+import com.snoreware.mpk.model.input.DriverDTO;
 import com.snoreware.mpk.repos.DriverRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
