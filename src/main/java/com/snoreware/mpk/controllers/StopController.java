@@ -56,6 +56,7 @@ public class StopController {
         if (stopToUpdate != null) stopToUpdate.setStopBreakdown(!stopToUpdate.isStopBreakdown());
         else return ResponseEntity.badRequest().build();
 
+        repository.save(stopToUpdate);
         return ResponseEntity.ok().build();
     }
 

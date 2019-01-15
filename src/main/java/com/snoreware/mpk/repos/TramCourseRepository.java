@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface TramCourseRepository extends CrudRepository<TramCourseEntity, UUID> {
     List<TramCourseEntity> findAllByOrderByCourseIdDesc();
+
+    TramCourseEntity findByCourseId(UUID courseId);
 }

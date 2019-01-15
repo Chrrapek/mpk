@@ -21,6 +21,10 @@ public class DriverEntity {
         this.salary = salary;
     }
 
+    public DriverEntity(UUID driverId) {
+        this.driverId = driverId;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "driver_id", nullable = false, unique = true)

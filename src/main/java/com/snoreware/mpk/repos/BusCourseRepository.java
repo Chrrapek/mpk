@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface BusCourseRepository extends CrudRepository<BusCourseEntity, UUID> {
     List<BusCourseEntity> findAllByOrderByCourseIdDesc();
+
+    BusCourseEntity findByCourseId(UUID courseId);
 }
