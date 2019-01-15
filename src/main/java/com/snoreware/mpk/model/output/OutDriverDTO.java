@@ -1,21 +1,16 @@
-package com.snoreware.mpk.model.input;
+package com.snoreware.mpk.model.output;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DriverDTO {
+public class OutDriverDTO {
     private UUID driverId;
     private String name;
     private String surname;
-    private String sex;
-    private Float salary;
-    private List<UUID> tramCourses;
-    private List<UUID> busCourses;
 }

@@ -1,7 +1,6 @@
 package com.snoreware.mpk.controllers;
 
 import com.snoreware.mpk.MpkApplication;
-import com.snoreware.mpk.entities.TramCourseEntity;
 import com.snoreware.mpk.entities.TramEntity;
 import com.snoreware.mpk.model.input.VehicleDTO;
 import com.snoreware.mpk.model.output.TramDTO;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/tram")
@@ -37,16 +35,16 @@ public class TramController {
                 newTram.getLowFloor()));
     }
 
-    @DeleteMapping("/remove")
-    public void removeTram(@RequestBody VehicleDTO vehicleDTO) {
-        tramRepository.deleteById(vehicleDTO.getVehicleNumber());
+    @DeleteMapping("/remove/{id}")
+    public void removeTram(@PathVariable Long id) {
+        tramRepository.deleteById(id);
 
-        log.info(String.format("Removed tram of id %d", vehicleDTO.getVehicleNumber()));
+        log.info(String.format("Removed tram of id %d", id));
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity updateTram(@RequestBody VehicleDTO vehicleDTO) {
-        TramEntity tramToUpdate = tramRepository.findByVehicleNumber(vehicleDTO.getVehicleNumber());
+    @PatchMapping("/update/{id}")
+    public ResponseEntity updateTram(@RequestBody VehicleDTO vehicleDTO, @PathVariable Long id) {
+        TramEntity tramToUpdate = tramRepository.findByVehicleNumber(id);
         if (vehicleDTO.getLowFloor() != null)
             tramToUpdate.setLowFloor(vehicleDTO.getLowFloor());
         if (vehicleDTO.getNumberOfWagons() != null)
@@ -57,36 +55,36 @@ public class TramController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<TramDTO>> getAllTrams() {
+    public ResponseEntity<List<Long>> getAllTrams() {
         List<TramEntity> trams = tramRepository.findAllByOrderByVehicleNumberDesc();
 
-        List<TramDTO> response = new ArrayList<>();
+        List<Long> response = new ArrayList<>();
         for (TramEntity tramEntity : trams) {
-            response.add(new TramDTO(
-                    tramEntity.getVehicleNumber(),
-                    tramEntity.getNumberOfWagons(),
-                    tramEntity.getLowFloor(),
-                    getUUIDList(tramEntity.getTramCourses()),
-                    tramEntity.getVehicleBreakdown()));
+            response.add(tramEntity.getVehicleNumber());
         }
 
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/failure")
-    public ResponseEntity changeBreakdownStatus(@RequestBody VehicleDTO vehicleDTO) {
-        TramEntity tramToChange = tramRepository.findByVehicleNumber(vehicleDTO.getVehicleNumber());
+    @PostMapping("/failure/{id}")
+    public ResponseEntity changeBreakdownStatus(@PathVariable Long id) {
+        TramEntity tramToChange = tramRepository.findByVehicleNumber(id);
         tramToChange.setVehicleBreakdown(!tramToChange.getVehicleBreakdown());
 
         tramRepository.save(tramToChange);
         return ResponseEntity.ok().build();
     }
 
-    public List<UUID> getUUIDList(List<TramCourseEntity> busCourses) {
-        List<UUID> result = new ArrayList<>();
-        for (TramCourseEntity course : busCourses)
-            result.add(course.getCourseId());
+    @GetMapping("/{id}")
+    public ResponseEntity<TramDTO> getOneBusInfo(@PathVariable Long id) {
+        TramEntity bus = tramRepository.findByVehicleNumber(id);
+        TramDTO result = new TramDTO(
+                bus.getVehicleNumber(),
+                bus.getNumberOfWagons(),
+                bus.getLowFloor(),
+                bus.getUUIDList(),
+                bus.getVehicleBreakdown());
 
-        return result;
+        return ResponseEntity.ok().body(result);
     }
 }

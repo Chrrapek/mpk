@@ -11,6 +11,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BusDTO {
+
+    public BusDTO(Long vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
+    }
+
     private Long vehicleNumber;
     private Boolean articulated;
     private Boolean lowFloor;

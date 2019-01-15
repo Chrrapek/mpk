@@ -1,7 +1,6 @@
 package com.snoreware.mpk.controllers;
 
 import com.snoreware.mpk.MpkApplication;
-import com.snoreware.mpk.entities.BusCourseEntity;
 import com.snoreware.mpk.entities.BusEntity;
 import com.snoreware.mpk.model.input.VehicleDTO;
 import com.snoreware.mpk.model.output.BusDTO;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/bus")
@@ -36,15 +34,15 @@ public class BusController {
                 newBus.getLowFloor()));
     }
 
-    @DeleteMapping("/remove")
-    public void removeBus(@RequestBody VehicleDTO vehicleDTO) {
-        busRepository.deleteById(vehicleDTO.getVehicleNumber());
-        log.info(String.format("Removed bus of id %d", vehicleDTO.getVehicleNumber()));
+    @DeleteMapping("/remove/{id}")
+    public void removeBus(@PathVariable Long id) {
+        busRepository.deleteById(id);
+        log.info(String.format("Removed bus of id %d", id));
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity updateBus(@RequestBody VehicleDTO vehicleDTO) {
-        BusEntity busToUpdate = busRepository.findByVehicleNumber(vehicleDTO.getVehicleNumber());
+    @PatchMapping("/update/{id}")
+    public ResponseEntity updateBus(@RequestBody VehicleDTO vehicleDTO, @PathVariable Long id) {
+        BusEntity busToUpdate = busRepository.findByVehicleNumber(id);
         if (vehicleDTO.getLowFloor() != null)
             busToUpdate.setLowFloor(vehicleDTO.getLowFloor());
         if (vehicleDTO.getArticulated() != null)
@@ -55,36 +53,37 @@ public class BusController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<BusDTO>> getAllBuses() {
+    public ResponseEntity<List<Long>> getAllBuses() {
         List<BusEntity> buses = busRepository.findAllByOrderByVehicleNumberAsc();
 
-        List<BusDTO> response = new ArrayList<>();
+        List<Long> response = new ArrayList<>();
         for (BusEntity busEntity : buses) {
-            response.add(new BusDTO(
-                    busEntity.getVehicleNumber(),
-                    busEntity.getArticulated(),
-                    busEntity.getLowFloor(),
-                    getUUIDList(busEntity.getBusCourses()),
-                    busEntity.getVehicleBreakdown()));
+            response.add(busEntity.getVehicleNumber());
         }
 
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/failure")
-    public ResponseEntity changeBreakdownStatus(@RequestBody VehicleDTO vehicleDTO) {
-        BusEntity busToChange = busRepository.findByVehicleNumber(vehicleDTO.getVehicleNumber());
+    @PostMapping("/failure/{id}")
+    public ResponseEntity changeBreakdownStatus(@PathVariable Long id) {
+        BusEntity busToChange = busRepository.findByVehicleNumber(id);
         busToChange.setVehicleBreakdown(!busToChange.getVehicleBreakdown());
 
         busRepository.save(busToChange);
         return ResponseEntity.ok().build();
     }
 
-    public List<UUID> getUUIDList(List<BusCourseEntity> busCourses) {
-        List<UUID> result = new ArrayList<>();
-        for (BusCourseEntity course : busCourses)
-            result.add(course.getCourseId());
 
-        return result;
+    @GetMapping("/{id}")
+    public ResponseEntity<BusDTO> getOneBusInfo(@PathVariable Long id) {
+        BusEntity bus = busRepository.findByVehicleNumber(id);
+        BusDTO result = new BusDTO(
+                bus.getVehicleNumber(),
+                bus.getArticulated(),
+                bus.getLowFloor(),
+                bus.getUUIDList(),
+                bus.getVehicleBreakdown());
+
+        return ResponseEntity.ok().body(result);
     }
 }
