@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +26,7 @@ public class StopEntity {
     private boolean stopBreakdown;
 
     @OneToMany(mappedBy = "stop")
-    private List<StopOnRouteEntity> stopsOnRoutes = new ArrayList<>();
+    private List<StopOnRouteEntity> stopsOnRoutes;
 
     public StopEntity(String stopName) {
         this.stopId = UUID.randomUUID();
