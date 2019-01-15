@@ -4,15 +4,18 @@ import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.DriverEntity;
 import com.snoreware.mpk.entities.RouteEntity;
 import com.snoreware.mpk.entities.TramCourseEntity;
+import com.snoreware.mpk.entities.TramEntity;
 import com.snoreware.mpk.model.input.CourseDTO;
 import com.snoreware.mpk.model.input.DriverDTO;
 import com.snoreware.mpk.model.input.RouteDTO;
+import com.snoreware.mpk.model.output.OutCourseDTO;
 import com.snoreware.mpk.repos.TramCourseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,10 +37,9 @@ public class TramCourseController {
                 courseDTO.getRouteNumber(),
                 courseDTO.getManyWagonsNeeded());
 
-        if (courseDTO.getRouteNumber() != null)
-            tramCourse.setRoute(new RouteEntity(courseDTO.getRouteNumber()));
-        if (courseDTO.getDriverId() != null)
-            tramCourse.setDriver(new DriverEntity(courseDTO.getDriverId()));
+        tramCourse.setRoute(new RouteEntity(courseDTO.getRouteNumber()));
+        tramCourse.setDriver(new DriverEntity(courseDTO.getDriverId()));
+        tramCourse.setTram(new TramEntity(courseDTO.getVehicleNumber()));
 
         tramCourseRepository.save(tramCourse);
 
@@ -46,24 +48,35 @@ public class TramCourseController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete")
-    private ResponseEntity removeTramCourse(@RequestBody CourseDTO courseDTO) {
-        tramCourseRepository.deleteById(courseDTO.getCourseId());
+    @DeleteMapping("/delete/{id}")
+    private ResponseEntity removeTramCourse(@PathVariable UUID id) {
+        tramCourseRepository.deleteById(id);
 
-        log.info(String.format("Removed course with UUID %s", courseDTO.getCourseId()));
+        log.info(String.format("Removed course with UUID %s", id));
 
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/all")
-    private ResponseEntity<List<TramCourseEntity>> getAllTramCourses() {
+    private ResponseEntity<List<OutCourseDTO>> getAllTramCourses() {
         List<TramCourseEntity> tramCourses = tramCourseRepository.findAllByOrderByCourseIdDesc();
+        List<OutCourseDTO> result = new ArrayList<>();
+        for (TramCourseEntity tramCourse : tramCourses) {
+            result.add(
+                    new OutCourseDTO(
+                            tramCourse.getCourseId(),
+                            tramCourse.getTram().getLowFloor(),
+                            tramCourse.getTram().getNumberOfWagons(),
+                            tramCourse.getTram().getVehicleNumber(),
+                            tramCourse.getDriver().getDriverId(),
+                            tramCourse.getRoute().getRouteNumber()));
+        }
 
-        return ResponseEntity.ok().body(tramCourses);
+        return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping("/driver")
-    private ResponseEntity assignTramDriver(@RequestBody DriverDTO driverDTO, @RequestParam UUID courseNumber) {
+    @PostMapping("/{courseId}/driver")
+    private ResponseEntity assignTramDriver(@RequestBody DriverDTO driverDTO, @PathVariable UUID courseNumber) {
         DriverEntity assignedDriver = new DriverEntity(driverDTO.getDriverId());
         TramCourseEntity courseToUpdate = tramCourseRepository.findByCourseId(courseNumber);
 
@@ -73,8 +86,8 @@ public class TramCourseController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/route")
-    private ResponseEntity assignRoute(@RequestBody RouteDTO routeDTO, @RequestParam UUID courseId) {
+    @PostMapping("/{courseId}/route")
+    private ResponseEntity assignRoute(@RequestBody RouteDTO routeDTO, @PathVariable UUID courseId) {
         RouteEntity route = new RouteEntity(routeDTO.getRouteNumber());
         TramCourseEntity courseToUpdate = tramCourseRepository.findByCourseId(courseId);
 

@@ -23,6 +23,10 @@ public class TramEntity extends VehicleEntity {
         this.numberOfWagons = numberOfWagons;
     }
 
+    public TramEntity(Long vehicleNumber) {
+        super(vehicleNumber);
+    }
+
     public List<UUID> getUUIDList() {
         List<UUID> result = new ArrayList<>();
         for (TramCourseEntity course : tramCourses)

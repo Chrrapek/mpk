@@ -66,17 +66,17 @@ public class BusCourseController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete")
-    private ResponseEntity removeBusCourse(@RequestBody CourseDTO courseDTO) {
-        busCourseRepository.deleteById(courseDTO.getCourseId());
+    @DeleteMapping("/delete/{id}")
+    private ResponseEntity removeBusCourse(@PathVariable UUID id) {
+        busCourseRepository.deleteById(id);
 
-        log.info(String.format("Removed course with UUID %s", courseDTO.getCourseId()));
+        log.info(String.format("Removed course with UUID %s", id));
 
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/driver")
-    private ResponseEntity assignBusDriver(@RequestBody DriverDTO driverDTO, @RequestParam UUID courseId) {
+    @PostMapping("/{courseId}/driver")
+    private ResponseEntity assignBusDriver(@RequestBody DriverDTO driverDTO, @PathVariable UUID courseId) {
         DriverEntity assignedDriver = new DriverEntity(driverDTO.getDriverId());
         BusCourseEntity courseToUpdate = busCourseRepository.findByCourseId(courseId);
 
@@ -86,8 +86,8 @@ public class BusCourseController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/route")
-    private ResponseEntity assignRoute(@RequestBody RouteDTO routeDTO, @RequestParam UUID courseId) {
+    @PostMapping("/{courseId}/route")
+    private ResponseEntity assignRoute(@RequestBody RouteDTO routeDTO, @PathVariable UUID courseId) {
         RouteEntity route = new RouteEntity(routeDTO.getRouteNumber());
         BusCourseEntity courseToUpdate = busCourseRepository.findByCourseId(courseId);
 
