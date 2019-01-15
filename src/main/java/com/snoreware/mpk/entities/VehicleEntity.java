@@ -24,4 +24,8 @@ public abstract class VehicleEntity {
     private Boolean vehicleBreakdown;
 
     private Boolean lowFloor;
+
+    public VehicleEntity(Long vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
+    }
 }

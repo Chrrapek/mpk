@@ -2,17 +2,20 @@ package com.snoreware.mpk.controllers;
 
 import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.BusCourseEntity;
+import com.snoreware.mpk.entities.BusEntity;
 import com.snoreware.mpk.entities.DriverEntity;
 import com.snoreware.mpk.entities.RouteEntity;
 import com.snoreware.mpk.model.input.CourseDTO;
 import com.snoreware.mpk.model.input.DriverDTO;
 import com.snoreware.mpk.model.input.RouteDTO;
+import com.snoreware.mpk.model.output.OutCourseDTO;
 import com.snoreware.mpk.repos.BusCourseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,10 +31,21 @@ public class BusCourseController {
     }
 
     @GetMapping("/all")
-    private ResponseEntity<List<BusCourseEntity>> getAllBusCourses() {
+    private ResponseEntity<List<OutCourseDTO>> getAllBusCourses() {
         List<BusCourseEntity> busCourses = busCourseRepository.findAllByOrderByCourseIdDesc();
+        List<OutCourseDTO> result = new ArrayList<>();
+        for (BusCourseEntity busCourse : busCourses) {
+            result.add(
+                    new OutCourseDTO(
+                            busCourse.getCourseId(),
+                            busCourse.getBus().getLowFloor(),
+                            busCourse.getBus().getArticulated(),
+                            busCourse.getBus().getVehicleNumber(),
+                            busCourse.getDriver().getDriverId(),
+                            busCourse.getRoute().getRouteNumber()));
+        }
 
-        return ResponseEntity.ok().body(busCourses);
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/add")
@@ -41,10 +55,9 @@ public class BusCourseController {
                 courseDTO.getRouteNumber(),
                 courseDTO.getArticulatedNeeded());
 
-        if (courseDTO.getRouteNumber() != null)
-            busCourse.setRoute(new RouteEntity(courseDTO.getRouteNumber()));
-        if (courseDTO.getDriverId() != null)
-            busCourse.setDriver(new DriverEntity(courseDTO.getDriverId()));
+        busCourse.setRoute(new RouteEntity(courseDTO.getRouteNumber()));
+        busCourse.setDriver(new DriverEntity(courseDTO.getDriverId()));
+        busCourse.setBus(new BusEntity(courseDTO.getVehicleNumber()));
 
         busCourseRepository.save(busCourse);
 

@@ -23,6 +23,10 @@ public class BusEntity extends VehicleEntity {
         this.articulated = articulated;
     }
 
+    public BusEntity(Long vehicleNumber) {
+        super(vehicleNumber);
+    }
+
     public List<UUID> getUUIDList() {
         List<UUID> result = new ArrayList<>();
         for (BusCourseEntity course : busCourses)

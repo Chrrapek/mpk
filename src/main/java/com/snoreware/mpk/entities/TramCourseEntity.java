@@ -3,11 +3,13 @@ package com.snoreware.mpk.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -25,11 +27,16 @@ public class TramCourseEntity extends CourseEntity {
     private boolean needsManyWagons;
 
     @ManyToOne
+    @NotNull
+    @UniqueElements
     private DriverEntity driver;
 
     @ManyToOne
+    @NotNull
+    @UniqueElements
     private TramEntity tram;
 
     @ManyToOne
+    @NotNull
     private RouteEntity route;
 }
