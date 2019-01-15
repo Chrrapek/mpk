@@ -50,7 +50,7 @@ public class DriverController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/update/{ŭid}")
+    @PatchMapping("/update/{uid}")
     public ResponseEntity<Object> updateSalary(@RequestBody DriverDTO driver, @PathVariable UUID uid) {
         DriverEntity driverToUpdate = repository.findByDriverId(uid);
         if (driver.getName() != null) driverToUpdate.setName(driver.getName());
