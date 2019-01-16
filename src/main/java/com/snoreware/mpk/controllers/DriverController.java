@@ -64,15 +64,18 @@ public class DriverController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<OutDriverDTO>> getAllDrivers() {
+    public ResponseEntity<List<OutDriverDTO>> getAllDrivers(@RequestParam boolean onlyAvailable) {
         List<DriverEntity> drivers = repository.findAllByOrderByDriverIdAsc();
         List<OutDriverDTO> result = new ArrayList<>();
 
         for (DriverEntity driverEntity : drivers) {
-            result.add(new OutDriverDTO(
-                    driverEntity.getDriverId(),
-                    driverEntity.getName(),
-                    driverEntity.getSurname()));
+            if (onlyAvailable
+                    && driverEntity.getTramCourses().size() == 0
+                    && driverEntity.getBusCourses().size() == 0)
+                result.add(new OutDriverDTO(
+                        driverEntity.getDriverId(),
+                        driverEntity.getName(),
+                        driverEntity.getSurname()));
         }
 
         return ResponseEntity.ok().body(result);
@@ -92,4 +95,6 @@ public class DriverController {
 
         return ResponseEntity.ok().body(result);
     }
+
+
 }

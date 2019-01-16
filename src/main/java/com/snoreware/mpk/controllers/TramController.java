@@ -55,12 +55,13 @@ public class TramController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Long>> getAllTrams() {
+    public ResponseEntity<List<Long>> getAllTrams(@RequestParam boolean notBroken) {
         List<TramEntity> trams = tramRepository.findAllByOrderByVehicleNumberDesc();
 
         List<Long> response = new ArrayList<>();
         for (TramEntity tramEntity : trams) {
-            response.add(tramEntity.getVehicleNumber());
+            if (notBroken && !tramEntity.getVehicleBreakdown())
+                response.add(tramEntity.getVehicleNumber());
         }
 
         return ResponseEntity.ok().body(response);

@@ -54,11 +54,12 @@ public class StopController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<OutStopDTO>> getAllStops() {
+    public ResponseEntity<List<OutStopDTO>> getAllStops(@RequestParam boolean notBroken) {
         List<StopEntity> stops = repository.findAllByOrderByStopNameDesc();
         List<OutStopDTO> result = new ArrayList<>();
         for (StopEntity stopEntity : stops) {
-            result.add(new OutStopDTO(
+            if (notBroken && !stopEntity.isStopBreakdown())
+                result.add(new OutStopDTO(
                     stopEntity.getStopId(),
                     stopEntity.getStopName()));
         }
