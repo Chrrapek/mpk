@@ -55,11 +55,12 @@ public class StopsOnRouteController {
         List<OutStopDTO> result = new ArrayList<>();
 
         for (StopOnRouteEntity stop : stops) {
-            result.add(new OutStopDTO(
-                    stop.getStopNumber(),
-                    stop.getStop().getStopId(),
-                    stop.getStop().getStopName()
-            ));
+            if (!stop.getStop().isStopBreakdown())
+                result.add(new OutStopDTO(
+                        stop.getStopNumber(),
+                        stop.getStop().getStopId(),
+                        stop.getStop().getStopName()
+                ));
         }
 
         result.sort(Comparator.comparingInt(OutStopDTO::getStopNumber));
