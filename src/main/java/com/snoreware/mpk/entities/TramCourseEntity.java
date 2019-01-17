@@ -5,17 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tram_courses")
+@Table(name = "tram_courses", indexes = {@Index(name = "T_COURSES",
+        columnList = "course_id,tram_vehicle_number,driver_driver_id,route_route_number")})
 public class TramCourseEntity extends CourseEntity {
     public TramCourseEntity(boolean lowFloorNeeded, Long routeNumber, boolean needsManyWagons) {
         super(lowFloorNeeded);
