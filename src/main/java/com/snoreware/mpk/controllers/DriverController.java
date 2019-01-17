@@ -12,11 +12,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
+@NamedStoredProcedureQueries({
+        @NamedStoredProcedureQuery(name = "seniority_updater",
+                procedureName = "seniority_updater")
+})
 @RequestMapping("/driver")
 public class DriverController {
     private DriverRepository repository;
@@ -113,16 +119,17 @@ public class DriverController {
         return ResponseEntity.ok().body(result);
     }
 
+    @PostMapping("/resetSeniority/{inParam1}")
+    public ResponseEntity resetSeniority(@PathVariable UUID inParam1) {
+        repository.removeSeniority(inParam1);
+
+        return ResponseEntity.ok().build();
+    }
+
     @Scheduled(cron = "0 * * * * *")
     @Transactional
     void updateSeniority() {
-        List<DriverEntity> allDrivers = repository.findAllByOrderByDriverIdAsc();
-        for (DriverEntity driver : allDrivers) {
-            if (driver.getTramCourses().size() > 0 || driver.getBusCourses().size() > 0) {
-                driver.increaseSeniority();
-            }
-            repository.save(driver);
-        }
+        repository.updateSeniority();
     }
 
 }
