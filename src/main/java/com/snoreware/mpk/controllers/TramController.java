@@ -54,14 +54,26 @@ public class TramController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Long>> getAllTrams(@RequestParam boolean notBroken) {
+    @GetMapping("/byStatus")
+    public ResponseEntity<List<Long>> getFilteredTrams(@RequestParam boolean notBroken) {
         List<TramEntity> trams = tramRepository.findAllByOrderByVehicleNumberDesc();
 
         List<Long> response = new ArrayList<>();
         for (TramEntity tramEntity : trams) {
             if (notBroken && !tramEntity.getVehicleBreakdown())
                 response.add(tramEntity.getVehicleNumber());
+        }
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Long>> getAllTrams() {
+        List<TramEntity> trams = tramRepository.findAllByOrderByVehicleNumberDesc();
+
+        List<Long> response = new ArrayList<>();
+        for (TramEntity tramEntity : trams) {
+            response.add(tramEntity.getVehicleNumber());
         }
 
         return ResponseEntity.ok().body(response);

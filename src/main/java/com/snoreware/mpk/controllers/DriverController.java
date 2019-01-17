@@ -63,8 +63,8 @@ public class DriverController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<OutDriverDTO>> getAllDrivers(@RequestParam boolean onlyAvailable) {
+    @GetMapping("/byStatus")
+    public ResponseEntity<List<OutDriverDTO>> getFilteredDrivers(@RequestParam boolean onlyAvailable) {
         List<DriverEntity> drivers = repository.findAllByOrderByDriverIdAsc();
         List<OutDriverDTO> result = new ArrayList<>();
 
@@ -76,6 +76,21 @@ public class DriverController {
                         driverEntity.getDriverId(),
                         driverEntity.getName(),
                         driverEntity.getSurname()));
+        }
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<OutDriverDTO>> getAllDrivers() {
+        List<DriverEntity> drivers = repository.findAllByOrderByDriverIdAsc();
+        List<OutDriverDTO> result = new ArrayList<>();
+
+        for (DriverEntity driverEntity : drivers) {
+            result.add(new OutDriverDTO(
+                    driverEntity.getDriverId(),
+                    driverEntity.getName(),
+                    driverEntity.getSurname()));
         }
 
         return ResponseEntity.ok().body(result);

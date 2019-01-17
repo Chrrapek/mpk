@@ -64,6 +64,19 @@ public class BusController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/byStatus")
+    public ResponseEntity<List<Long>> getAllBuses(@RequestParam boolean notBroken) {
+        List<BusEntity> buses = busRepository.findAllByOrderByVehicleNumberAsc();
+
+        List<Long> response = new ArrayList<>();
+        for (BusEntity busEntity : buses) {
+            if (notBroken && !busEntity.getVehicleBreakdown())
+                response.add(busEntity.getVehicleNumber());
+        }
+
+        return ResponseEntity.ok().body(response);
+    }
+
     @PostMapping("/failure/{id}")
     public ResponseEntity changeBreakdownStatus(@PathVariable Long id) {
         BusEntity busToChange = busRepository.findByVehicleNumber(id);
