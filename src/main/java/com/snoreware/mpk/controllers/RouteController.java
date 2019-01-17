@@ -22,7 +22,7 @@ public class RouteController {
 
     private static final Logger log = LoggerFactory.getLogger(MpkApplication.class);
 
-    @PostMapping("/add/{id}")
+    @PostMapping("/add/{routeNumber}")
     public ResponseEntity addRoute(@PathVariable Long routeNumber) {
         repository.save(new RouteEntity(routeNumber));
 
@@ -30,7 +30,7 @@ public class RouteController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/remove/{id}")
+    @DeleteMapping("/remove/{routeNumber}")
     public ResponseEntity removeRoute(@PathVariable Long routeNumber) {
         repository.deleteById(routeNumber);
 
