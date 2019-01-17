@@ -8,6 +8,8 @@ import com.snoreware.mpk.repos.DriverRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -111,5 +113,16 @@ public class DriverController {
         return ResponseEntity.ok().body(result);
     }
 
+    @Scheduled(cron = "0 * * * * *")
+    @Transactional
+    void updateSeniority() {
+        List<DriverEntity> allDrivers = repository.findAllByOrderByDriverIdAsc();
+        for (DriverEntity driver : allDrivers) {
+            if (driver.getTramCourses().size() > 0 || driver.getBusCourses().size() > 0) {
+                driver.increaseSeniority();
+            }
+            repository.save(driver);
+        }
+    }
 
 }

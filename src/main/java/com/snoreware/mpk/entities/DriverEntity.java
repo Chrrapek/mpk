@@ -3,6 +3,8 @@ package com.snoreware.mpk.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class DriverEntity {
         this.surname = surname;
         this.sex = sex;
         this.salary = salary;
+        this.seniority = 0;
     }
 
     public DriverEntity(UUID driverId) {
@@ -47,9 +50,11 @@ public class DriverEntity {
     private Integer seniority;
 
     @OneToMany(mappedBy = "driver")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<TramCourseEntity> tramCourses;
 
     @OneToMany(mappedBy = "driver")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<BusCourseEntity> busCourses;
 
     public List<UUID> getUUIDOfBusCourses() {
@@ -66,5 +71,9 @@ public class DriverEntity {
             result.add(course.getCourseId());
 
         return result;
+    }
+
+    public void increaseSeniority() {
+        this.seniority++;
     }
 }
