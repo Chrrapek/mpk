@@ -37,9 +37,9 @@ public class StopsOnRouteController {
 
         List<UUID> stopsFromDto = dto.getStops();
 
-        for (int i = 1; i <= stopsFromDto.size(); i++) {
+        for (int i = 0; i < stopsFromDto.size(); i++) {
             StopOnRouteEntity newStop = new StopOnRouteEntity(
-                    i,
+                    i + 1,
                     new StopEntity(stopsFromDto.get(i)),
                     route);
 
