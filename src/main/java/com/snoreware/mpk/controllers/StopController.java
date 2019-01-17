@@ -53,8 +53,8 @@ public class StopController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<OutStopDTO>> getAllStops(@RequestParam boolean notBroken) {
+    @GetMapping("/byStatus")
+    public ResponseEntity<List<OutStopDTO>> getFilteredStops(@RequestParam boolean notBroken) {
         List<StopEntity> stops = repository.findAllByOrderByStopNameDesc();
         List<OutStopDTO> result = new ArrayList<>();
         for (StopEntity stopEntity : stops) {
@@ -63,6 +63,27 @@ public class StopController {
                     stopEntity.getStopId(),
                     stopEntity.getStopName()));
         }
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<OutStopDTO>> getAllStops() {
+        List<StopEntity> stops = repository.findAllByOrderByStopNameDesc();
+        List<OutStopDTO> result = new ArrayList<>();
+        for (StopEntity stopEntity : stops) {
+            result.add(new OutStopDTO(
+                    stopEntity.getStopId(),
+                    stopEntity.getStopName()));
+        }
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/{stopId}")
+    public ResponseEntity<StopDTO> getSingleStop(@PathVariable UUID stopId) {
+        StopEntity stop = repository.findByStopId(stopId);
+        StopDTO result = new StopDTO(stop.getStopId(), stop.getStopName(), stop.isStopBreakdown());
 
         return ResponseEntity.ok().body(result);
     }
