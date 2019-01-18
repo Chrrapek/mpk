@@ -4,7 +4,6 @@ import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.RouteEntity;
 import com.snoreware.mpk.entities.StopEntity;
 import com.snoreware.mpk.entities.StopOnRouteEntity;
-import com.snoreware.mpk.model.input.StopsOnRouteDTO;
 import com.snoreware.mpk.model.output.OutStopDTO;
 import com.snoreware.mpk.repos.StopsOnRouteRepository;
 import org.slf4j.Logger;
@@ -31,11 +30,10 @@ public class StopsOnRouteController {
 
     @PostMapping("/modify/{routeNumber}")
     @Transactional
-    public ResponseEntity addOrModifyRoute(@RequestBody StopsOnRouteDTO dto, @PathVariable Long routeNumber) {
+    public ResponseEntity addOrModifyRoute(@RequestBody List<UUID> stopsFromDto,
+                                           @PathVariable Long routeNumber) {
         RouteEntity route = new RouteEntity(routeNumber);
         repository.deleteByRoute(route);
-
-        List<UUID> stopsFromDto = dto.getStops();
 
         for (int i = 0; i < stopsFromDto.size(); i++) {
             StopOnRouteEntity newStop = new StopOnRouteEntity(
