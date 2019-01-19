@@ -83,32 +83,32 @@ public class TramController {
     }
 
     @GetMapping("/number")
-    public ResponseEntity<List<TramDTO>> getOnlyArticulated(@RequestParam int minimalWagons) {
+    public ResponseEntity<List<Long>> getOnlyArticulated(@RequestParam int minimalWagons) {
         List<TramEntity> buses = tramRepository.findByNumberOfWagonsGreaterThanEqual(minimalWagons);
 
-        List<TramDTO> result = new ArrayList<>();
-        buses.forEach(tramEntity -> result.add(new TramDTO(tramEntity.getVehicleNumber())));
+        List<Long> result = new ArrayList<>();
+        buses.forEach(tramEntity -> result.add(tramEntity.getVehicleNumber()));
 
         return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/lowFloor")
-    public ResponseEntity<List<TramDTO>> getOnlyLowFloor() {
+    public ResponseEntity<List<Long>> getOnlyLowFloor() {
         List<TramEntity> buses = tramRepository.findByLowFloorOrderByVehicleNumberDesc(true);
 
-        List<TramDTO> result = new ArrayList<>();
-        buses.forEach(tramEntity -> result.add(new TramDTO(tramEntity.getVehicleNumber())));
+        List<Long> result = new ArrayList<>();
+        buses.forEach(tramEntity -> result.add(tramEntity.getVehicleNumber()));
 
         return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/lowFloorAndNumber")
-    public ResponseEntity<List<TramDTO>> getLowFloorAndAtLeastWagons(@RequestParam int minimalWagons) {
+    public ResponseEntity<List<Long>> getLowFloorAndAtLeastWagons(@RequestParam int minimalWagons) {
         List<TramEntity> buses =
                 tramRepository.findByNumberOfWagonsGreaterThanEqualAndLowFloor(minimalWagons, true);
 
-        List<TramDTO> result = new ArrayList<>();
-        buses.forEach(tramEntity -> result.add(new TramDTO(tramEntity.getVehicleNumber())));
+        List<Long> result = new ArrayList<>();
+        buses.forEach(tramEntity -> result.add(tramEntity.getVehicleNumber()));
 
         return ResponseEntity.ok().body(result);
     }

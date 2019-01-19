@@ -67,31 +67,31 @@ public class BusController {
     }
 
     @GetMapping("/articulated")
-    public ResponseEntity<List<BusDTO>> getOnlyArticulated() {
+    public ResponseEntity<List<Long>> getOnlyArticulated() {
         List<BusEntity> buses = busRepository.findByArticulatedOrderByVehicleNumberDesc(true);
 
-        List<BusDTO> result = new ArrayList<>();
-        buses.forEach(busEntity -> result.add(new BusDTO(busEntity.getVehicleNumber())));
+        List<Long> result = new ArrayList<>();
+        buses.forEach(busEntity -> result.add(busEntity.getVehicleNumber()));
 
         return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/lowFloor")
-    public ResponseEntity<List<BusDTO>> getOnlyLowFloor() {
+    public ResponseEntity<List<Long>> getOnlyLowFloor() {
         List<BusEntity> buses = busRepository.findByLowFloorOrderByVehicleNumberDesc(true);
 
-        List<BusDTO> result = new ArrayList<>();
-        buses.forEach(busEntity -> result.add(new BusDTO(busEntity.getVehicleNumber())));
+        List<Long> result = new ArrayList<>();
+        buses.forEach(busEntity -> result.add(busEntity.getVehicleNumber()));
 
         return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/lowFloorAndArt")
-    public ResponseEntity<List<BusDTO>> getLowFloorAndArticulated() {
+    public ResponseEntity<List<Long>> getLowFloorAndArticulated() {
         List<BusEntity> buses = busRepository.findByLowFloorAndArticulated(true, true);
 
-        List<BusDTO> result = new ArrayList<>();
-        buses.forEach(busEntity -> result.add(new BusDTO(busEntity.getVehicleNumber())));
+        List<Long> result = new ArrayList<>();
+        buses.forEach(busEntity -> result.add(busEntity.getVehicleNumber()));
 
         return ResponseEntity.ok().body(result);
     }
