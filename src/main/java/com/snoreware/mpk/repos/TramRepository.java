@@ -10,5 +10,10 @@ import java.util.List;
 public interface TramRepository extends CrudRepository<TramEntity, Long> {
     TramEntity findByVehicleNumber(Long vehicleNumber);
 
+    List<TramEntity> findByLowFloorOrderByVehicleNumberDesc(boolean lowFloor);
+
+    List<TramEntity> findByNumberOfWagonsGreaterThanEqual(int numberOfWagons);
+
+    List<TramEntity> findByNumberOfWagonsGreaterThanEqualAndLowFloor(int numberOfWagons, boolean lowFloor);
     List<TramEntity> findAllByOrderByVehicleNumberDesc();
 }

@@ -59,10 +59,11 @@ public class TramController {
         List<TramEntity> trams = tramRepository.findAllByOrderByVehicleNumberDesc();
 
         List<Long> response = new ArrayList<>();
-        for (TramEntity tramEntity : trams) {
+
+        trams.forEach(tramEntity -> {
             if (notBroken && !tramEntity.getVehicleBreakdown())
                 response.add(tramEntity.getVehicleNumber());
-        }
+        });
 
         return ResponseEntity.ok().body(response);
     }
@@ -72,11 +73,40 @@ public class TramController {
         List<TramEntity> trams = tramRepository.findAllByOrderByVehicleNumberDesc();
 
         List<Long> response = new ArrayList<>();
-        for (TramEntity tramEntity : trams) {
-            response.add(tramEntity.getVehicleNumber());
-        }
+        trams.forEach(tramEntity -> response.add(tramEntity.getVehicleNumber()));
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/number")
+    public ResponseEntity<List<TramDTO>> getOnlyArticulated(@RequestParam int minimalWagons) {
+        List<TramEntity> buses = tramRepository.findByNumberOfWagonsGreaterThanEqual(minimalWagons);
+
+        List<TramDTO> result = new ArrayList<>();
+        buses.forEach(tramEntity -> result.add(new TramDTO(tramEntity.getVehicleNumber())));
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/lowFloor")
+    public ResponseEntity<List<TramDTO>> getOnlyLowFloor() {
+        List<TramEntity> buses = tramRepository.findByLowFloorOrderByVehicleNumberDesc(true);
+
+        List<TramDTO> result = new ArrayList<>();
+        buses.forEach(tramEntity -> result.add(new TramDTO(tramEntity.getVehicleNumber())));
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/lowFloorAndNumber")
+    public ResponseEntity<List<TramDTO>> getLowFloorAndAtLeastWagons(@RequestParam int minimalWagons) {
+        List<TramEntity> buses =
+                tramRepository.findByNumberOfWagonsGreaterThanEqualAndLowFloor(minimalWagons, true);
+
+        List<TramDTO> result = new ArrayList<>();
+        buses.forEach(tramEntity -> result.add(new TramDTO(tramEntity.getVehicleNumber())));
+
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/failure/{id}")

@@ -16,4 +16,8 @@ public class TramDTO {
     private Boolean lowFloor;
     private List<UUID> courses;
     private Boolean breakdown;
+
+    public TramDTO(Long vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
+    }
 }

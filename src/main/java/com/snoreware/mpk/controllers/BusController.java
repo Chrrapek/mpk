@@ -57,11 +57,39 @@ public class BusController {
         List<BusEntity> buses = busRepository.findAllByOrderByVehicleNumberAsc();
 
         List<Long> response = new ArrayList<>();
-        for (BusEntity busEntity : buses) {
-            response.add(busEntity.getVehicleNumber());
-        }
+        buses.forEach(busEntity -> response.add(busEntity.getVehicleNumber()));
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/articulated")
+    public ResponseEntity<List<BusDTO>> getOnlyArticulated() {
+        List<BusEntity> buses = busRepository.findByArticulatedOrderByVehicleNumberDesc(true);
+
+        List<BusDTO> result = new ArrayList<>();
+        buses.forEach(busEntity -> result.add(new BusDTO(busEntity.getVehicleNumber())));
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/lowFloor")
+    public ResponseEntity<List<BusDTO>> getOnlyLowFloor() {
+        List<BusEntity> buses = busRepository.findByLowFloorOrderByVehicleNumberDesc(true);
+
+        List<BusDTO> result = new ArrayList<>();
+        buses.forEach(busEntity -> result.add(new BusDTO(busEntity.getVehicleNumber())));
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/lowFloorAndArt")
+    public ResponseEntity<List<BusDTO>> getLowFloorAndArticulated() {
+        List<BusEntity> buses = busRepository.findByLowFloorAndArticulated(true, true);
+
+        List<BusDTO> result = new ArrayList<>();
+        buses.forEach(busEntity -> result.add(new BusDTO(busEntity.getVehicleNumber())));
+
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/byStatus")
@@ -69,10 +97,11 @@ public class BusController {
         List<BusEntity> buses = busRepository.findAllByOrderByVehicleNumberAsc();
 
         List<Long> response = new ArrayList<>();
-        for (BusEntity busEntity : buses) {
+
+        buses.forEach(busEntity -> {
             if (notBroken && !busEntity.getVehicleBreakdown())
                 response.add(busEntity.getVehicleNumber());
-        }
+        });
 
         return ResponseEntity.ok().body(response);
     }
