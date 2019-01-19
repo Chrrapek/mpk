@@ -118,6 +118,7 @@ public class BusController {
         if (busToChange.getVehicleBreakdown()) {
             List<UUID> courses = busToChange.getUUIDList();
             courses.forEach(course -> busCourseRepository.deleteById(course));
+            busToChange.setBusCourses(new ArrayList<>());
         }
 
         busRepository.save(busToChange);

@@ -121,6 +121,7 @@ public class TramController {
         if (tramToChange.getVehicleBreakdown()) {
             List<UUID> courses = tramToChange.getUUIDList();
             courses.forEach(course -> tramCourseRepository.deleteById(course));
+            tramToChange.setTramCourses(new ArrayList<>());
         }
 
         tramRepository.save(tramToChange);
