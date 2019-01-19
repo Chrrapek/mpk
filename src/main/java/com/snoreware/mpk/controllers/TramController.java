@@ -4,6 +4,7 @@ import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.TramEntity;
 import com.snoreware.mpk.model.input.VehicleDTO;
 import com.snoreware.mpk.model.output.TramDTO;
+import com.snoreware.mpk.repos.TramCourseRepository;
 import com.snoreware.mpk.repos.TramRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,14 +13,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/tram")
 public class TramController {
     private TramRepository tramRepository;
+    private TramCourseRepository tramCourseRepository;
 
-    public TramController(TramRepository tramRepository) {
+    public TramController(TramRepository tramRepository, TramCourseRepository tramCourseRepository) {
         this.tramRepository = tramRepository;
+        this.tramCourseRepository = tramCourseRepository;
     }
 
     private static final Logger log = LoggerFactory.getLogger(MpkApplication.class);
@@ -113,6 +117,11 @@ public class TramController {
     public ResponseEntity changeBreakdownStatus(@PathVariable Long id) {
         TramEntity tramToChange = tramRepository.findByVehicleNumber(id);
         tramToChange.setVehicleBreakdown(!tramToChange.getVehicleBreakdown());
+
+        if (tramToChange.getVehicleBreakdown()) {
+            List<UUID> courses = tramToChange.getUUIDList();
+            courses.forEach(course -> tramCourseRepository.deleteById(course));
+        }
 
         tramRepository.save(tramToChange);
         return ResponseEntity.ok().build();

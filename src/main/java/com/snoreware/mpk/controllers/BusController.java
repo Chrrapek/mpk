@@ -4,6 +4,7 @@ import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.BusEntity;
 import com.snoreware.mpk.model.input.VehicleDTO;
 import com.snoreware.mpk.model.output.BusDTO;
+import com.snoreware.mpk.repos.BusCourseRepository;
 import com.snoreware.mpk.repos.BusRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,14 +13,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/bus")
 public class BusController {
     private BusRepository busRepository;
+    private BusCourseRepository busCourseRepository;
 
-    public BusController(BusRepository busRepository) {
+    public BusController(BusRepository busRepository, BusCourseRepository busCourseRepository) {
         this.busRepository = busRepository;
+        this.busCourseRepository = busCourseRepository;
     }
 
     private static final Logger log = LoggerFactory.getLogger(MpkApplication.class);
@@ -110,6 +114,11 @@ public class BusController {
     public ResponseEntity changeBreakdownStatus(@PathVariable Long id) {
         BusEntity busToChange = busRepository.findByVehicleNumber(id);
         busToChange.setVehicleBreakdown(!busToChange.getVehicleBreakdown());
+
+        if (busToChange.getVehicleBreakdown()) {
+            List<UUID> courses = busToChange.getUUIDList();
+            courses.forEach(course -> busCourseRepository.deleteById(course));
+        }
 
         busRepository.save(busToChange);
         return ResponseEntity.ok().build();
