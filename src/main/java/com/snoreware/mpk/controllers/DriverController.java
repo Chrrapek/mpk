@@ -126,6 +126,19 @@ public class DriverController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/experience")
+    public ResponseEntity<List<OutDriverDTO>> getDriversMoreExperiencedThan(@RequestParam int seniority) {
+        List<DriverEntity> drivers = repository.findAllBySeniorityGreaterThanEqual(seniority);
+        List<OutDriverDTO> result = new ArrayList<>();
+        drivers.forEach(driverEntity -> result.add(new OutDriverDTO(
+                driverEntity.getDriverId(),
+                driverEntity.getName(),
+                driverEntity.getSurname()
+        )));
+
+        return ResponseEntity.ok().body(result);
+    }
+
     @Scheduled(cron = "0 * * * * *")
     @Transactional
     void updateSeniority() {

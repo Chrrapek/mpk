@@ -14,6 +14,8 @@ public interface DriverRepository extends CrudRepository<DriverEntity, UUID> {
     List<DriverEntity> findAllByOrderByDriverIdAsc();
     DriverEntity findByDriverId(UUID driverId);
 
+    List<DriverEntity> findAllBySeniorityGreaterThanEqual(int seniority);
+
     @Procedure(name = "updateSeniority")
     void updateSeniority();
 
