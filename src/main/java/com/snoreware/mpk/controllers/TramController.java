@@ -65,7 +65,7 @@ public class TramController {
         List<Long> response = new ArrayList<>();
 
         trams.forEach(tramEntity -> {
-            if (notBroken && !tramEntity.getVehicleBreakdown())
+            if (notBroken && !tramEntity.getVehicleBreakdown() && tramEntity.getTramCourses().size() == 0)
                 response.add(tramEntity.getVehicleNumber());
         });
 
@@ -87,7 +87,10 @@ public class TramController {
         List<TramEntity> buses = tramRepository.findByNumberOfWagonsGreaterThanEqual(minimalWagons);
 
         List<Long> result = new ArrayList<>();
-        buses.forEach(tramEntity -> result.add(tramEntity.getVehicleNumber()));
+        buses.forEach(tramEntity -> {
+            if (tramEntity.getTramCourses().size() == 0)
+                result.add(tramEntity.getVehicleNumber());
+        });
 
         return ResponseEntity.ok().body(result);
     }
@@ -97,7 +100,10 @@ public class TramController {
         List<TramEntity> buses = tramRepository.findByLowFloorOrderByVehicleNumberDesc(true);
 
         List<Long> result = new ArrayList<>();
-        buses.forEach(tramEntity -> result.add(tramEntity.getVehicleNumber()));
+        buses.forEach(tramEntity -> {
+            if (tramEntity.getTramCourses().size() == 0)
+                result.add(tramEntity.getVehicleNumber());
+        });
 
         return ResponseEntity.ok().body(result);
     }
@@ -108,7 +114,10 @@ public class TramController {
                 tramRepository.findByNumberOfWagonsGreaterThanEqualAndLowFloor(minimalWagons, true);
 
         List<Long> result = new ArrayList<>();
-        buses.forEach(tramEntity -> result.add(tramEntity.getVehicleNumber()));
+        buses.forEach(tramEntity -> {
+            if (tramEntity.getTramCourses().size() == 0)
+                result.add(tramEntity.getVehicleNumber());
+        });
 
         return ResponseEntity.ok().body(result);
     }

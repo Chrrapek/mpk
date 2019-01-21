@@ -76,7 +76,7 @@ public class DriverController {
         List<DriverEntity> drivers = repository.findAllByOrderByDriverIdAsc();
         List<OutDriverDTO> result = new ArrayList<>();
 
-        for (DriverEntity driverEntity : drivers) {
+        drivers.forEach(driverEntity -> {
             if (onlyAvailable
                     && driverEntity.getTramCourses().size() == 0
                     && driverEntity.getBusCourses().size() == 0)
@@ -84,7 +84,7 @@ public class DriverController {
                         driverEntity.getDriverId(),
                         driverEntity.getName(),
                         driverEntity.getSurname()));
-        }
+        });
 
         return ResponseEntity.ok().body(result);
     }
@@ -94,12 +94,10 @@ public class DriverController {
         List<DriverEntity> drivers = repository.findAllByOrderByDriverIdAsc();
         List<OutDriverDTO> result = new ArrayList<>();
 
-        for (DriverEntity driverEntity : drivers) {
-            result.add(new OutDriverDTO(
-                    driverEntity.getDriverId(),
-                    driverEntity.getName(),
-                    driverEntity.getSurname()));
-        }
+        drivers.forEach(driverEntity -> result.add(new OutDriverDTO(
+                driverEntity.getDriverId(),
+                driverEntity.getName(),
+                driverEntity.getSurname())));
 
         return ResponseEntity.ok().body(result);
     }
@@ -130,11 +128,14 @@ public class DriverController {
     public ResponseEntity<List<OutDriverDTO>> getDriversMoreExperiencedThan(@RequestParam int seniority) {
         List<DriverEntity> drivers = repository.findAllBySeniorityGreaterThanEqual(seniority);
         List<OutDriverDTO> result = new ArrayList<>();
-        drivers.forEach(driverEntity -> result.add(new OutDriverDTO(
-                driverEntity.getDriverId(),
-                driverEntity.getName(),
-                driverEntity.getSurname()
-        )));
+        drivers.forEach(driverEntity -> {
+            if (driverEntity.getBusCourses().size() == 0 && driverEntity.getTramCourses().size() == 0)
+                result.add(new OutDriverDTO(
+                        driverEntity.getDriverId(),
+                        driverEntity.getName(),
+                        driverEntity.getSurname()
+                ));
+        });
 
         return ResponseEntity.ok().body(result);
     }

@@ -71,7 +71,10 @@ public class BusController {
         List<BusEntity> buses = busRepository.findByArticulatedOrderByVehicleNumberDesc(true);
 
         List<Long> result = new ArrayList<>();
-        buses.forEach(busEntity -> result.add(busEntity.getVehicleNumber()));
+        buses.forEach(busEntity -> {
+            if (busEntity.getBusCourses().size() == 0)
+                result.add(busEntity.getVehicleNumber());
+        });
 
         return ResponseEntity.ok().body(result);
     }
@@ -81,7 +84,10 @@ public class BusController {
         List<BusEntity> buses = busRepository.findByLowFloorOrderByVehicleNumberDesc(true);
 
         List<Long> result = new ArrayList<>();
-        buses.forEach(busEntity -> result.add(busEntity.getVehicleNumber()));
+        buses.forEach(busEntity -> {
+            if (busEntity.getBusCourses().size() == 0)
+                result.add(busEntity.getVehicleNumber());
+        });
 
         return ResponseEntity.ok().body(result);
     }
@@ -91,7 +97,10 @@ public class BusController {
         List<BusEntity> buses = busRepository.findByLowFloorAndArticulated(true, true);
 
         List<Long> result = new ArrayList<>();
-        buses.forEach(busEntity -> result.add(busEntity.getVehicleNumber()));
+        buses.forEach(busEntity -> {
+            if (busEntity.getBusCourses().size() == 0)
+                result.add(busEntity.getVehicleNumber());
+        });
 
         return ResponseEntity.ok().body(result);
     }
@@ -103,7 +112,7 @@ public class BusController {
         List<Long> response = new ArrayList<>();
 
         buses.forEach(busEntity -> {
-            if (notBroken && !busEntity.getVehicleBreakdown())
+            if (notBroken && !busEntity.getVehicleBreakdown() && busEntity.getBusCourses().size() == 0)
                 response.add(busEntity.getVehicleNumber());
         });
 
