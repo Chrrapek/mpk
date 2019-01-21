@@ -94,4 +94,14 @@ public class BusCourseController {
         busCourseRepository.save(courseToUpdate);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/{courseId}/bus")
+    private ResponseEntity changeTram(@RequestParam Long vehicleNumber, @PathVariable UUID courseId) {
+        BusEntity tram = new BusEntity(vehicleNumber);
+        BusCourseEntity courseToUpdate = busCourseRepository.findByCourseId(courseId);
+
+        courseToUpdate.setBus(tram);
+        busCourseRepository.save(courseToUpdate);
+        return ResponseEntity.ok().build();
+    }
 }
