@@ -7,7 +7,6 @@ import com.snoreware.mpk.entities.TramCourseEntity;
 import com.snoreware.mpk.entities.TramEntity;
 import com.snoreware.mpk.model.input.CourseDTO;
 import com.snoreware.mpk.model.input.DriverDTO;
-import com.snoreware.mpk.model.input.RouteDTO;
 import com.snoreware.mpk.model.output.OutCourseDTO;
 import com.snoreware.mpk.repos.TramCourseRepository;
 import org.slf4j.Logger;
@@ -87,8 +86,8 @@ public class TramCourseController {
     }
 
     @PostMapping("/{courseId}/route")
-    private ResponseEntity assignRoute(@RequestBody RouteDTO routeDTO, @PathVariable UUID courseId) {
-        RouteEntity route = new RouteEntity(routeDTO.getRouteNumber());
+    private ResponseEntity assignRoute(@RequestParam Long routeNumber, @PathVariable UUID courseId) {
+        RouteEntity route = new RouteEntity(routeNumber);
         TramCourseEntity courseToUpdate = tramCourseRepository.findByCourseId(courseId);
 
         courseToUpdate.setRoute(route);
