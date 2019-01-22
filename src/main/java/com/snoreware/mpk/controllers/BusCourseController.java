@@ -33,16 +33,8 @@ public class BusCourseController {
     private ResponseEntity<List<OutCourseDTO>> getAllBusCourses() {
         List<BusCourseEntity> busCourses = busCourseRepository.findAllByOrderByCourseIdDesc();
         List<OutCourseDTO> result = new ArrayList<>();
-        for (BusCourseEntity busCourse : busCourses) {
-            result.add(
-                    new OutCourseDTO(
-                            busCourse.getCourseId(),
-                            busCourse.getBus().getLowFloor(),
-                            busCourse.getBus().getArticulated(),
-                            busCourse.getBus().getVehicleNumber(),
-                            busCourse.getDriver().getDriverId(),
-                            busCourse.getRoute().getRouteNumber()));
-        }
+
+        busCourses.forEach(busCourse -> result.add(OutCourseDTO.dtoFromBusCourse(busCourse)));
 
         return ResponseEntity.ok().body(result);
     }

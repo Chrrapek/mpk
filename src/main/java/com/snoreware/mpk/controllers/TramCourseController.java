@@ -60,16 +60,8 @@ public class TramCourseController {
     private ResponseEntity<List<OutCourseDTO>> getAllTramCourses() {
         List<TramCourseEntity> tramCourses = tramCourseRepository.findAllByOrderByCourseIdDesc();
         List<OutCourseDTO> result = new ArrayList<>();
-        for (TramCourseEntity tramCourse : tramCourses) {
-            result.add(
-                    new OutCourseDTO(
-                            tramCourse.getCourseId(),
-                            tramCourse.getTram().getLowFloor(),
-                            tramCourse.getTram().getNumberOfWagons(),
-                            tramCourse.getTram().getVehicleNumber(),
-                            tramCourse.getDriver().getDriverId(),
-                            tramCourse.getRoute().getRouteNumber()));
-        }
+
+        tramCourses.forEach(tramCourse -> result.add(OutCourseDTO.dtoFromTramCourse(tramCourse)));
 
         return ResponseEntity.ok().body(result);
     }

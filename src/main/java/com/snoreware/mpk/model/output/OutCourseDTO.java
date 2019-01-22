@@ -1,5 +1,7 @@
 package com.snoreware.mpk.model.output;
 
+import com.snoreware.mpk.entities.BusCourseEntity;
+import com.snoreware.mpk.entities.TramCourseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,5 +36,25 @@ public class OutCourseDTO {
         this.vehicleNumber = vehicleNumber;
         this.driverId = driverId;
         this.routeNumber = routeNumber;
+    }
+
+    public static OutCourseDTO dtoFromBusCourse(BusCourseEntity busCourse) {
+        return new OutCourseDTO(
+                busCourse.getCourseId(),
+                busCourse.getBus().getLowFloor(),
+                busCourse.getBus().getArticulated(),
+                busCourse.getBus().getVehicleNumber(),
+                busCourse.getDriver().getDriverId(),
+                busCourse.getRoute().getRouteNumber());
+    }
+
+    public static OutCourseDTO dtoFromTramCourse(TramCourseEntity tramCourse) {
+        return new OutCourseDTO(
+                tramCourse.getCourseId(),
+                tramCourse.getTram().getLowFloor(),
+                tramCourse.getTram().getNumberOfWagons(),
+                tramCourse.getTram().getVehicleNumber(),
+                tramCourse.getDriver().getDriverId(),
+                tramCourse.getRoute().getRouteNumber());
     }
 }
