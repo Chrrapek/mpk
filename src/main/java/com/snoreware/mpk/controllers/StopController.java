@@ -7,9 +7,9 @@ import com.snoreware.mpk.repos.StopRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequestMapping("/stop")
 @RestController
@@ -56,13 +56,10 @@ public class StopController {
     @GetMapping("/byStatus")
     public ResponseEntity<List<OutStopDTO>> getFilteredStops(@RequestParam boolean notBroken) {
         List<StopEntity> stops = repository.findAllByOrderByStopNameDesc();
-        List<OutStopDTO> result = new ArrayList<>();
-        for (StopEntity stopEntity : stops) {
-            if (notBroken && !stopEntity.isStopBreakdown())
-                result.add(new OutStopDTO(
-                    stopEntity.getStopId(),
-                    stopEntity.getStopName()));
-        }
+        List<OutStopDTO> result = stops.stream()
+                .filter(stopEntity -> notBroken && !stopEntity.isStopBreakdown())
+                .map(stopEntity -> new OutStopDTO(stopEntity.getStopId(), stopEntity.getStopName()))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }
@@ -70,12 +67,11 @@ public class StopController {
     @GetMapping("/all")
     public ResponseEntity<List<OutStopDTO>> getAllStops() {
         List<StopEntity> stops = repository.findAllByOrderByStopNameDesc();
-        List<OutStopDTO> result = new ArrayList<>();
-        for (StopEntity stopEntity : stops) {
-            result.add(new OutStopDTO(
+        List<OutStopDTO> result = stops.stream()
+                .map(stopEntity -> new OutStopDTO(
                     stopEntity.getStopId(),
-                    stopEntity.getStopName()));
-        }
+                        stopEntity.getStopName()))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }

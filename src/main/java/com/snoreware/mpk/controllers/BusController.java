@@ -2,6 +2,7 @@ package com.snoreware.mpk.controllers;
 
 import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.BusEntity;
+import com.snoreware.mpk.entities.VehicleEntity;
 import com.snoreware.mpk.model.input.VehicleDTO;
 import com.snoreware.mpk.model.output.BusDTO;
 import com.snoreware.mpk.repos.BusCourseRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/bus")
@@ -60,8 +62,9 @@ public class BusController {
     public ResponseEntity<List<Long>> getAllBuses() {
         List<BusEntity> buses = busRepository.findAllByOrderByVehicleNumberAsc();
 
-        List<Long> response = new ArrayList<>();
-        buses.forEach(busEntity -> response.add(busEntity.getVehicleNumber()));
+        List<Long> response = buses.stream()
+                .map(VehicleEntity::getVehicleNumber)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(response);
     }
@@ -70,11 +73,10 @@ public class BusController {
     public ResponseEntity<List<Long>> getOnlyArticulated() {
         List<BusEntity> buses = busRepository.findByArticulatedOrderByVehicleNumberDesc(true);
 
-        List<Long> result = new ArrayList<>();
-        buses.forEach(busEntity -> {
-            if (busEntity.getBusCourses().size() == 0)
-                result.add(busEntity.getVehicleNumber());
-        });
+        List<Long> result = buses.stream()
+                .filter(busEntity -> busEntity.getBusCourses().size() == 0)
+                .map(VehicleEntity::getVehicleNumber)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }
@@ -83,11 +85,10 @@ public class BusController {
     public ResponseEntity<List<Long>> getOnlyLowFloor() {
         List<BusEntity> buses = busRepository.findByLowFloorOrderByVehicleNumberDesc(true);
 
-        List<Long> result = new ArrayList<>();
-        buses.forEach(busEntity -> {
-            if (busEntity.getBusCourses().size() == 0)
-                result.add(busEntity.getVehicleNumber());
-        });
+        List<Long> result = buses.stream()
+                .filter(busEntity -> busEntity.getBusCourses().size() == 0)
+                .map(VehicleEntity::getVehicleNumber)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }
@@ -96,11 +97,10 @@ public class BusController {
     public ResponseEntity<List<Long>> getLowFloorAndArticulated() {
         List<BusEntity> buses = busRepository.findByLowFloorAndArticulated(true, true);
 
-        List<Long> result = new ArrayList<>();
-        buses.forEach(busEntity -> {
-            if (busEntity.getBusCourses().size() == 0)
-                result.add(busEntity.getVehicleNumber());
-        });
+        List<Long> result = buses.stream()
+                .filter(busEntity -> busEntity.getBusCourses().size() == 0)
+                .map(VehicleEntity::getVehicleNumber)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }
@@ -109,12 +109,12 @@ public class BusController {
     public ResponseEntity<List<Long>> getAllBuses(@RequestParam boolean notBroken) {
         List<BusEntity> buses = busRepository.findAllByOrderByVehicleNumberAsc();
 
-        List<Long> response = new ArrayList<>();
-
-        buses.forEach(busEntity -> {
-            if (notBroken && !busEntity.getVehicleBreakdown() && busEntity.getBusCourses().size() == 0)
-                response.add(busEntity.getVehicleNumber());
-        });
+        List<Long> response = buses.stream()
+                .filter(busEntity -> notBroken
+                        && !busEntity.getVehicleBreakdown()
+                        && busEntity.getBusCourses().size() == 0)
+                .map(VehicleEntity::getVehicleNumber)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(response);
     }
@@ -138,12 +138,7 @@ public class BusController {
     @GetMapping("/{id}")
     public ResponseEntity<BusDTO> getOneBusInfo(@PathVariable Long id) {
         BusEntity bus = busRepository.findByVehicleNumber(id);
-        BusDTO result = new BusDTO(
-                bus.getVehicleNumber(),
-                bus.getArticulated(),
-                bus.getLowFloor(),
-                bus.getUUIDList(),
-                bus.getVehicleBreakdown());
+        BusDTO result = BusDTO.dtoFromEntity(bus);
 
         return ResponseEntity.ok().body(result);
     }

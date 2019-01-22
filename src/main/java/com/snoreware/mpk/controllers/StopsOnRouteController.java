@@ -12,10 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/routeStops")
@@ -50,18 +50,15 @@ public class StopsOnRouteController {
     @GetMapping("/{routeNumber}")
     public ResponseEntity<List<OutStopDTO>> getOneRoute(@PathVariable Long routeNumber) {
         List<StopOnRouteEntity> stops = repository.findByRoute(new RouteEntity(routeNumber));
-        List<OutStopDTO> result = new ArrayList<>();
 
-        for (StopOnRouteEntity stop : stops) {
-            if (!stop.getStop().isStopBreakdown())
-                result.add(new OutStopDTO(
+        List<OutStopDTO> result = stops.stream()
+                .filter(stop -> !stop.getStop().isStopBreakdown())
+                .map(stop -> new OutStopDTO(
                         stop.getStopNumber(),
                         stop.getStop().getStopId(),
-                        stop.getStop().getStopName()
-                ));
-        }
-
-        result.sort(Comparator.comparingInt(OutStopDTO::getStopNumber));
+                        stop.getStop().getStopName()))
+                .sorted(Comparator.comparingInt(OutStopDTO::getStopNumber))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }

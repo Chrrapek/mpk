@@ -1,5 +1,6 @@
 package com.snoreware.mpk.model.output;
 
+import com.snoreware.mpk.entities.TramEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,14 @@ public class TramDTO {
 
     public TramDTO(Long vehicleNumber) {
         this.vehicleNumber = vehicleNumber;
+    }
+
+    public static TramDTO dtoFromEntity(TramEntity tram) {
+        return new TramDTO(
+                tram.getVehicleNumber(),
+                tram.getNumberOfWagons(),
+                tram.getLowFloor(),
+                tram.getUUIDList(),
+                tram.getVehicleBreakdown());
     }
 }

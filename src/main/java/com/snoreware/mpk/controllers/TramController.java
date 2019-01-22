@@ -2,6 +2,7 @@ package com.snoreware.mpk.controllers;
 
 import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.TramEntity;
+import com.snoreware.mpk.entities.VehicleEntity;
 import com.snoreware.mpk.model.input.VehicleDTO;
 import com.snoreware.mpk.model.output.TramDTO;
 import com.snoreware.mpk.repos.TramCourseRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tram")
@@ -62,12 +64,12 @@ public class TramController {
     public ResponseEntity<List<Long>> getFilteredTrams(@RequestParam boolean notBroken) {
         List<TramEntity> trams = tramRepository.findAllByOrderByVehicleNumberDesc();
 
-        List<Long> response = new ArrayList<>();
-
-        trams.forEach(tramEntity -> {
-            if (notBroken && !tramEntity.getVehicleBreakdown() && tramEntity.getTramCourses().size() == 0)
-                response.add(tramEntity.getVehicleNumber());
-        });
+        List<Long> response = trams.stream()
+                .filter(tramEntity -> notBroken
+                        && !tramEntity.getVehicleBreakdown()
+                        && tramEntity.getTramCourses().size() == 0)
+                .map(VehicleEntity::getVehicleNumber)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(response);
     }
@@ -76,8 +78,9 @@ public class TramController {
     public ResponseEntity<List<Long>> getAllTrams() {
         List<TramEntity> trams = tramRepository.findAllByOrderByVehicleNumberDesc();
 
-        List<Long> response = new ArrayList<>();
-        trams.forEach(tramEntity -> response.add(tramEntity.getVehicleNumber()));
+        List<Long> response = trams.stream()
+                .map(VehicleEntity::getVehicleNumber)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(response);
     }
@@ -86,11 +89,10 @@ public class TramController {
     public ResponseEntity<List<Long>> getOnlyArticulated(@RequestParam int minimalWagons) {
         List<TramEntity> buses = tramRepository.findByNumberOfWagonsGreaterThanEqual(minimalWagons);
 
-        List<Long> result = new ArrayList<>();
-        buses.forEach(tramEntity -> {
-            if (tramEntity.getTramCourses().size() == 0)
-                result.add(tramEntity.getVehicleNumber());
-        });
+        List<Long> result = buses.stream()
+                .filter(tramEntity -> tramEntity.getTramCourses().size() == 0)
+                .map(VehicleEntity::getVehicleNumber)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }
@@ -99,11 +101,10 @@ public class TramController {
     public ResponseEntity<List<Long>> getOnlyLowFloor() {
         List<TramEntity> buses = tramRepository.findByLowFloorOrderByVehicleNumberDesc(true);
 
-        List<Long> result = new ArrayList<>();
-        buses.forEach(tramEntity -> {
-            if (tramEntity.getTramCourses().size() == 0)
-                result.add(tramEntity.getVehicleNumber());
-        });
+        List<Long> result = buses.stream()
+                .filter(tramEntity -> tramEntity.getTramCourses().size() == 0)
+                .map(VehicleEntity::getVehicleNumber)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }
@@ -113,11 +114,10 @@ public class TramController {
         List<TramEntity> buses =
                 tramRepository.findByNumberOfWagonsGreaterThanEqualAndLowFloor(minimalWagons, true);
 
-        List<Long> result = new ArrayList<>();
-        buses.forEach(tramEntity -> {
-            if (tramEntity.getTramCourses().size() == 0)
-                result.add(tramEntity.getVehicleNumber());
-        });
+        List<Long> result = buses.stream()
+                .filter(tramEntity -> tramEntity.getTramCourses().size() == 0)
+                .map(VehicleEntity::getVehicleNumber)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }
@@ -138,14 +138,9 @@ public class TramController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TramDTO> getOneBusInfo(@PathVariable Long id) {
-        TramEntity bus = tramRepository.findByVehicleNumber(id);
-        TramDTO result = new TramDTO(
-                bus.getVehicleNumber(),
-                bus.getNumberOfWagons(),
-                bus.getLowFloor(),
-                bus.getUUIDList(),
-                bus.getVehicleBreakdown());
+    public ResponseEntity<TramDTO> getOneTramInfo(@PathVariable Long id) {
+        TramEntity tram = tramRepository.findByVehicleNumber(id);
+        TramDTO result = TramDTO.dtoFromEntity(tram);
 
         return ResponseEntity.ok().body(result);
     }

@@ -17,6 +17,7 @@ import javax.persistence.NamedStoredProcedureQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @NamedStoredProcedureQueries({
@@ -74,17 +75,15 @@ public class DriverController {
     @GetMapping("/byStatus")
     public ResponseEntity<List<OutDriverDTO>> getFilteredDrivers(@RequestParam boolean onlyAvailable) {
         List<DriverEntity> drivers = repository.findAllByOrderByDriverIdAsc();
-        List<OutDriverDTO> result = new ArrayList<>();
-
-        drivers.forEach(driverEntity -> {
-            if (onlyAvailable
+        List<OutDriverDTO> result = drivers.stream()
+                .filter(driverEntity -> onlyAvailable
                     && driverEntity.getTramCourses().size() == 0
                     && driverEntity.getBusCourses().size() == 0)
-                result.add(new OutDriverDTO(
+                .map(driverEntity -> new OutDriverDTO(
                         driverEntity.getDriverId(),
                         driverEntity.getName(),
-                        driverEntity.getSurname()));
-        });
+                        driverEntity.getSurname()))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }
@@ -105,14 +104,7 @@ public class DriverController {
     @GetMapping("/{id}")
     public ResponseEntity<DriverDTO> getOneDriver(@PathVariable UUID id) {
         DriverEntity driver = repository.findByDriverId(id);
-        DriverDTO result = new DriverDTO(
-                driver.getDriverId(),
-                driver.getName(),
-                driver.getSurname(),
-                driver.getSex(),
-                driver.getSalary(),
-                driver.getUUIDOfTramCourses(),
-                driver.getUUIDOfBusCourses());
+        DriverDTO result = DriverDTO.dtoFromEntity(driver);
 
         return ResponseEntity.ok().body(result);
     }
@@ -127,15 +119,16 @@ public class DriverController {
     @GetMapping("/experience")
     public ResponseEntity<List<OutDriverDTO>> getDriversMoreExperiencedThan(@RequestParam int seniority) {
         List<DriverEntity> drivers = repository.findAllBySeniorityGreaterThanEqual(seniority);
-        List<OutDriverDTO> result = new ArrayList<>();
-        drivers.forEach(driverEntity -> {
-            if (driverEntity.getBusCourses().size() == 0 && driverEntity.getTramCourses().size() == 0)
-                result.add(new OutDriverDTO(
+
+        List<OutDriverDTO> result = drivers.stream()
+                .filter(driverEntity ->
+                        driverEntity.getBusCourses().size() == 0
+                                && driverEntity.getTramCourses().size() == 0)
+                .map(driverEntity -> new OutDriverDTO(
                         driverEntity.getDriverId(),
                         driverEntity.getName(),
-                        driverEntity.getSurname()
-                ));
-        });
+                        driverEntity.getSurname()))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }

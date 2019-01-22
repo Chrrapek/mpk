@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequestMapping("/busCourse")
 @RestController
@@ -34,7 +35,9 @@ public class BusCourseController {
         List<BusCourseEntity> busCourses = busCourseRepository.findAllByOrderByCourseIdDesc();
         List<OutCourseDTO> result = new ArrayList<>();
 
-        busCourses.forEach(busCourse -> result.add(OutCourseDTO.dtoFromBusCourse(busCourse)));
+        result = busCourses.stream()
+                .map(OutCourseDTO::dtoFromBusCourse)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(result);
     }
