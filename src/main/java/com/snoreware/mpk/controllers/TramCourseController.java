@@ -76,7 +76,8 @@ public class TramCourseController {
 
         courseToUpdate.setDriver(assignedDriver);
         tramCourseRepository.save(courseToUpdate);
-
+        log.info(String.format("Assigned driver with id %s to course %s",
+                assignedDriver.getDriverId(), courseNumber));
         return ResponseEntity.ok().build();
     }
 
@@ -87,6 +88,8 @@ public class TramCourseController {
 
         courseToUpdate.setRoute(route);
         tramCourseRepository.save(courseToUpdate);
+        log.info(String.format("Assigned route with number %d to course %s",
+                routeNumber, courseId));
         return ResponseEntity.ok().build();
     }
 
@@ -97,6 +100,8 @@ public class TramCourseController {
 
         courseToUpdate.setTram(tram);
         tramCourseRepository.save(courseToUpdate);
+        log.info(String.format("Assigned tram with number %d to course %s",
+                vehicleNumber, courseId));
         return ResponseEntity.ok().build();
     }
 }

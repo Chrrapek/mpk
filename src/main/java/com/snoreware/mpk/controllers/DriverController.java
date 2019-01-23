@@ -112,7 +112,7 @@ public class DriverController {
     @PostMapping("/resetSeniority/{inParam1}")
     public ResponseEntity resetSeniority(@PathVariable UUID inParam1) {
         repository.removeSeniority(inParam1);
-
+        log.info("Set seniority to 0 for driver " + inParam1);
         return ResponseEntity.ok().build();
     }
 
@@ -137,6 +137,7 @@ public class DriverController {
     @Transactional
     void updateSeniority() {
         repository.updateSeniority();
+        log.info("A seniority update occured (+1 to all assigned drivers)");
     }
 
 }

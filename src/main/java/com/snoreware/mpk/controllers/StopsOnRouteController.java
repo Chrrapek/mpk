@@ -43,7 +43,7 @@ public class StopsOnRouteController {
 
             repository.save(newStop);
         }
-
+        log.info("Changed route " + routeNumber);
         return ResponseEntity.ok().build();
     }
 

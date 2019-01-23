@@ -43,7 +43,7 @@ public class BusController {
     @DeleteMapping("/remove/{id}")
     public void removeBus(@PathVariable Long id) {
         busRepository.deleteById(id);
-        log.info(String.format("Removed bus of id %d", id));
+        log.info(String.format("Removed bus with id %d", id));
     }
 
     @PatchMapping("/update/{id}")
@@ -55,6 +55,7 @@ public class BusController {
             busToUpdate.setArticulated(vehicleDTO.getArticulated());
 
         busRepository.save(busToUpdate);
+        log.info("Updated bus with id" + id);
         return ResponseEntity.ok().build();
     }
 

@@ -1,9 +1,12 @@
 package com.snoreware.mpk.controllers;
 
+import com.snoreware.mpk.MpkApplication;
 import com.snoreware.mpk.entities.StopEntity;
 import com.snoreware.mpk.model.input.StopDTO;
 import com.snoreware.mpk.model.output.OutStopDTO;
 import com.snoreware.mpk.repos.StopRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,11 +23,14 @@ public class StopController {
         this.repository = repository;
     }
 
+    private static final Logger log = LoggerFactory.getLogger(MpkApplication.class);
+
     @PostMapping("/add")
     public ResponseEntity addStop(@RequestBody StopDTO stopDTO) {
         StopEntity stopToAdd = new StopEntity(stopDTO.getStopName());
         repository.save(stopToAdd);
 
+        log.info("Added new stop: " + stopDTO.getStopName());
         return ResponseEntity.ok().build();
     }
 
@@ -32,6 +38,7 @@ public class StopController {
     public ResponseEntity removeStop(@PathVariable UUID uid) {
         repository.deleteById(uid);
 
+        log.info("Removed stop with id " + uid);
         return ResponseEntity.ok().build();
     }
 
@@ -40,6 +47,7 @@ public class StopController {
         StopEntity stopToUpdate = repository.findByStopId(uid);
         stopToUpdate.setStopName(stopDTO.getStopName());
 
+        log.info("Updated stop with id ", uid);
         repository.save(stopToUpdate);
         return ResponseEntity.ok().build();
     }
@@ -50,6 +58,7 @@ public class StopController {
         stopToUpdate.setStopBreakdown(!stopToUpdate.isStopBreakdown());
 
         repository.save(stopToUpdate);
+        log.info("Changed breakdown state of stop " + uid);
         return ResponseEntity.ok().build();
     }
 
